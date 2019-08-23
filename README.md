@@ -14,6 +14,10 @@ Deploys a helm chart using GitHub actions.
 - `token`: Github repository token. If included and the event is a deployment
   then the deployment_status event will be fired.
 
+Additional parameters: If the action is being triggered by a deployment event
+and the `task` parameter in the deployment event is set to `"remove"` then this
+action will execute a `helm delete $service`
+
 ### Environment
 
 - `KUBECONFIG`: Kubeconfig file for Kubernetes cluster access.
