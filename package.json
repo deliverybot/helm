@@ -1,8 +1,13 @@
 {
   "name": "status",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",
+  "homepage": "https://github.com/deliverybot/helm",
+  "author": {
+    "name": "deliverybot",
+    "url": "https://github.com/deliverybot"
+  },
   "dependencies": {
     "@actions/core": "^1.0.0",
     "@actions/exec": "^1.0.0",
