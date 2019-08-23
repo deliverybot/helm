@@ -49,6 +49,7 @@ async function run() {
     const namespace = core.getInput("namespace", required);
     const chart = core.getInput("chart", required);
     const values = core.getInput("values") || "{}";
+    const dryRun = core.getInput("dry-run");
 
     // Load in the github context and deployment event.
     const context = github.context;
@@ -63,6 +64,7 @@ async function run() {
       "--namespace", namespace,
       "--values", "./values.yml",
     ];
+    if (dryRun) args.push("--dry-run");
 
     // Setup necessary files.
     if (process.env.KUBECONFIG_FILE) {

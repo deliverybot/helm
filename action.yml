@@ -10,6 +10,8 @@ inputs:
     description: 'Helm chart path'
   values:
     description: 'Helm chart values, expected to be a YAML or JSON string'
+  dry-run:
+    description: 'Helm dry-run option'
   token:
     description: >
       Github repository token. If included and the event is a deployment then
