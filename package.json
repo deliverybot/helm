@@ -1,0 +1,11 @@
+{
+  "name": "status",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.0.0",
+    "@actions/exec": "^1.0.0",
+    "@actions/github": "^1.0.0"
+  }
+}
