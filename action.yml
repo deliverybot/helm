@@ -1,0 +1,15 @@
+name: 'Deliverybot Helm Action'
+description: 'Deploys a helm chart'
+author: 'deliverybot'
+inputs:
+  release:
+    description: 'Helm release name'
+  namespace:
+    description: 'Kubernetes namespace name'
+  chart:
+    description: 'Helm chart name'
+  values:
+    description: 'Helm chart values, expected to be a YAML or JSON string'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
