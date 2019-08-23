@@ -7,9 +7,13 @@ inputs:
   namespace:
     description: 'Kubernetes namespace name'
   chart:
-    description: 'Helm chart name'
+    description: 'Helm chart path'
   values:
     description: 'Helm chart values, expected to be a YAML or JSON string'
+  token:
+    description: >
+      Github repository token. If included and the event is a deployment then
+      the deployment_status event will be fired.
 runs:
   using: 'docker'
   image: 'Dockerfile'
