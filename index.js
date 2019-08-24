@@ -32,6 +32,7 @@ async function status(state) {
       deployment_id: deployment.id,
       state,
       log_url: url,
+      target_url: url,
     });
   } catch (error) {
     core.warning(`Failed to set deployment status: ${error.message}`);
