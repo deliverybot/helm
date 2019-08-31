@@ -64,7 +64,7 @@ function getInput(name, options) {
   if (options && options.required && !val) {
     throw new Error(`Input required and not supplied: ${name}`);
   }
-  core.debug(`param: ${name} = "${val.replace('\n', ' ')}"`)
+  core.debug(`param: ${name} = "${val}"`)
   return val
 }
 
