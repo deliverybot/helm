@@ -48,7 +48,7 @@ function releaseName(name, track) {
 
 function chartName(name) {
   if (name === "app") {
-    return "./usr/src/charts/app"
+    return "/usr/src/charts/app"
   }
   return name
 }
