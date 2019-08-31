@@ -129,6 +129,8 @@ async function run() {
     }
     await writeFile("./values.yml", values);
 
+    core.debug(`env: KUBECONFIG="${opts.env.KUBECONFIG}"`)
+
     // Actually execute the deployment here.
     if (task === "remove") {
       await exec.exec("helm", ["delete", release, "--purge"], {
