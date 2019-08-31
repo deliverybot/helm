@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.2](https://github.com/deliverybot/helm/compare/v0.0.1...v0.0.2) (2019-08-31)
+
+
+### Bug Fixes
+
+* Absolute path for helm chart ([e15e1e4](https://github.com/deliverybot/helm/commit/e15e1e4))
+* Add debug for kubeconfig ([bfa3f4b](https://github.com/deliverybot/helm/commit/bfa3f4b))
+* Add log and target url ([688f310](https://github.com/deliverybot/helm/commit/688f310))
+* Cat out the value file ([4d83f1e](https://github.com/deliverybot/helm/commit/4d83f1e))
+* Include debug logs about vars ([4ad9022](https://github.com/deliverybot/helm/commit/4ad9022))
+* Parse values if an object ([76181ec](https://github.com/deliverybot/helm/commit/76181ec))
+* Remove replace on vars ([e624622](https://github.com/deliverybot/helm/commit/e624622))
+* Show variables in debug ([a416967](https://github.com/deliverybot/helm/commit/a416967))
+* Undefined object opts ([ab3e5f9](https://github.com/deliverybot/helm/commit/ab3e5f9))
+
+
+### Features
+
+* Add basic app chart ([35049a2](https://github.com/deliverybot/helm/commit/35049a2))
+* Add canary support built in ([27023d5](https://github.com/deliverybot/helm/commit/27023d5))
+
 ### 0.0.1 (2019-08-23)
 
 
