@@ -74,7 +74,6 @@ function getInput(name, options) {
   if (options && options.required && !val) {
     throw new Error(`Input required and not supplied: ${name}`);
   }
-  core.debug(`param: ${name} = "${val}"`)
   return val
 }
 
@@ -93,6 +92,15 @@ async function run() {
     const dryRun = getInput("dry-run");
     const task = getInput("task");
     const version = getInput("version");
+
+    core.debug(`param: track = "${track}"`)
+    core.debug(`param: release = "${release}"`)
+    core.debug(`param: namespace = "${namespace}"`)
+    core.debug(`param: chart = "${chart}"`)
+    core.debug(`param: values = "${values}"`)
+    core.debug(`param: dryRun = "${dryRun}"`)
+    core.debug(`param: task = "${task}"`)
+    core.debug(`param: version = "${version}"`)
 
     // Setup command options and arguments.
     const opts = { env: {} };
@@ -123,7 +131,9 @@ async function run() {
 
     // Actually execute the deployment here.
     if (task === "remove") {
-      await exec.exec("helm", ["delete", release, "--purge"], opts);
+      await exec.exec("helm", ["delete", release, "--purge"], {
+        ...opts, ignoreReturnCode: true,
+      });
     } else {
       await exec.exec("helm", args, opts);
     }
