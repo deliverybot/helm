@@ -56,7 +56,7 @@ function chartName(name) {
 function getInput(name, options) {
   const context = github.context;
   const deployment = context.payload.deployment;
-  const val = core.getInput(name, { ...opts, required: false })
+  const val = core.getInput(name, { ...options, required: false })
   if (deployment) {
     if (deployment[name]) return deployment[name];
     if (deployment.payload[name]) return deployment.payload[name];
