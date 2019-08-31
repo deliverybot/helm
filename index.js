@@ -56,14 +56,15 @@ function chartName(name) {
 function getInput(name, options) {
   const context = github.context;
   const deployment = context.payload.deployment;
-  const val = core.getInput(name, { ...options, required: false })
+  let val = core.getInput(name, { ...options, required: false })
   if (deployment) {
-    if (deployment[name]) return deployment[name];
-    if (deployment.payload[name]) return deployment.payload[name];
+    if (deployment[name]) val = deployment[name];
+    if (deployment.payload[name]) val = deployment.payload[name];
   }
   if (options && options.required && !val) {
     throw new Error(`Input required and not supplied: ${name}`);
   }
+  core.debug(`param: ${name} = "${val.replace('\n', ' ')}"`)
   return val
 }
 
@@ -109,8 +110,6 @@ async function run() {
       await writeFile(opts.env.KUBECONFIG, process.env.KUBECONFIG_FILE);
     }
     await writeFile("./values.yml", values);
-
-    await exec.exec("cat", "./values.yml")
 
     // Actually execute the deployment here.
     if (task === "remove") {
