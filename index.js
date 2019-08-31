@@ -53,6 +53,16 @@ function chartName(name) {
   return name
 }
 
+function getValues(values) {
+  if (!values) {
+    return "{}"
+  }
+  if (typeof values === "object") {
+    return JSON.stringify(values)
+  }
+  return values
+}
+
 function getInput(name, options) {
   const context = github.context;
   const deployment = context.payload.deployment;
@@ -79,7 +89,7 @@ async function run() {
     const release = releaseName(getInput("release", required), track);
     const namespace = getInput("namespace", required);
     const chart = chartName(getInput("chart", required));
-    const values = getInput("values") || "{}";
+    const values = getValues(getInput("values"));
     const dryRun = getInput("dry-run");
     const task = getInput("task");
     const version = getInput("version");
