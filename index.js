@@ -110,6 +110,8 @@ async function run() {
     }
     await writeFile("./values.yml", values);
 
+    await exec.exec("cat", "./values.yml")
+
     // Actually execute the deployment here.
     if (task === "remove") {
       await exec.exec("helm", ["delete", release, "--purge"], opts);
