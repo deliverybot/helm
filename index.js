@@ -39,6 +39,34 @@ async function status(state) {
   }
 }
 
+function releaseName(name, track) {
+  if (track !== "stable") {
+    return `${name}-${track}`
+  }
+  return name
+}
+
+function chartName(name) {
+  if (name === "app") {
+    return "./usr/src/charts/app"
+  }
+  return name
+}
+
+function getInput(name, options) {
+  const context = github.context;
+  const deployment = context.payload.deployment;
+  const val = core.getInput(name, { ...opts, required: false })
+  if (deployment) {
+    if (deployment[name]) return deployment[name];
+    if (deployment.payload[name]) return deployment.payload[name];
+  }
+  if (options && options.required && !val) {
+    throw new Error(`Input required and not supplied: ${name}`);
+  }
+  return val
+}
+
 /**
  * Run executes the helm deployment.
  */
@@ -46,16 +74,14 @@ async function run() {
   try {
     await status("pending");
 
-    const release = core.getInput("release", required);
-    const namespace = core.getInput("namespace", required);
-    const chart = core.getInput("chart", required);
-    const values = core.getInput("values") || "{}";
-    const dryRun = core.getInput("dry-run");
-
-    // Load in the github context and deployment event.
-    const context = github.context;
-    const task = (context.payload.deployment &&
-                  context.payload.deployment.task) || "deploy";
+    const track = getInput("track") || "stable";
+    const release = releaseName(getInput("release", required), track);
+    const namespace = getInput("namespace", required);
+    const chart = chartName(getInput("chart", required));
+    const values = getInput("values") || "{}";
+    const dryRun = getInput("dry-run");
+    const task = getInput("task");
+    const version = getInput("version");
 
     // Setup command options and arguments.
     const opts = { env: {} };
@@ -66,6 +92,16 @@ async function run() {
       "--values", "./values.yml",
     ];
     if (dryRun) args.push("--dry-run");
+    if (version) args.push(`--set=version=${version}`)
+
+    // Stable track only deploys service and ingress resources. Any other track
+    // name can be treated like a canary deployment.
+    if (track !== "stable") {
+      args.push(
+        "--set=service.enabled=false",
+        "--set=ingress.enabled=false",
+      )
+    }
 
     // Setup necessary files.
     if (process.env.KUBECONFIG_FILE) {
