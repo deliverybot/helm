@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/deliverybot/helm/compare/v0.0.2...v0.0.3) (2019-09-01)
+
+
+### Bug Fixes
+
+* Add value files to args ([9036930](https://github.com/deliverybot/helm/commit/9036930))
+* Default to root health ([b2d98d0](https://github.com/deliverybot/helm/commit/b2d98d0))
+* Parse secret values ([64b622a](https://github.com/deliverybot/helm/commit/64b622a))
+* Value list load if not string ([6483cd3](https://github.com/deliverybot/helm/commit/6483cd3))
+
+
+### Features
+
+* Helm chart customization ([abc7b15](https://github.com/deliverybot/helm/commit/abc7b15))
+* Templating of value files ([4b30064](https://github.com/deliverybot/helm/commit/4b30064))
+
 ### [0.0.2](https://github.com/deliverybot/helm/compare/v0.0.1...v0.0.2) (2019-08-31)
 
 
