@@ -5,7 +5,6 @@ const fs = require("fs");
 const util = require("util");
 
 const writeFile = util.promisify(fs.writeFile);
-
 const required = { required: true };
 
 /**
@@ -20,19 +19,19 @@ async function status(state) {
     const deployment = context.payload.deployment;
     const token = core.getInput("token");
     if (!token || !deployment) {
-      core.debug("Not setting deployment status")
+      core.debug("Not setting deployment status");
       return;
     }
 
     const client = new github.GitHub(token);
-    const url = `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}/checks`
+    const url = `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}/checks`;
 
     await client.repos.createDeploymentStatus({
       ...context.repo,
       deployment_id: deployment.id,
       state,
       log_url: url,
-      target_url: url,
+      target_url: url
     });
   } catch (error) {
     core.warning(`Failed to set deployment status: ${error.message}`);
@@ -41,32 +40,35 @@ async function status(state) {
 
 function releaseName(name, track) {
   if (track !== "stable") {
-    return `${name}-${track}`
+    return `${name}-${track}`;
   }
-  return name
+  return name;
 }
 
 function chartName(name) {
   if (name === "app") {
-    return "/usr/src/charts/app"
+    return "/usr/src/charts/app";
   }
-  return name
+  return name;
 }
 
 function getValues(values) {
   if (!values) {
-    return "{}"
+    return "{}";
   }
   if (typeof values === "object") {
-    return JSON.stringify(values)
+    return JSON.stringify(values);
   }
-  return values
+  return values;
 }
 
 function getInput(name, options) {
   const context = github.context;
   const deployment = context.payload.deployment;
-  let val = core.getInput(name, { ...options, required: false })
+  let val = core.getInput(name.replace("_", "-"), {
+    ...options,
+    required: false
+  });
   if (deployment) {
     if (deployment[name]) val = deployment[name];
     if (deployment.payload[name]) val = deployment.payload[name];
@@ -74,8 +76,10 @@ function getInput(name, options) {
   if (options && options.required && !val) {
     throw new Error(`Input required and not supplied: ${name}`);
   }
-  return val
+  return val;
 }
+
+function render() {}
 
 /**
  * Run executes the helm deployment.
@@ -89,37 +93,38 @@ async function run() {
     const namespace = getInput("namespace", required);
     const chart = chartName(getInput("chart", required));
     const values = getValues(getInput("values"));
-    const dryRun = getInput("dry-run");
+    const dryRun = getInput("dry_run");
     const task = getInput("task");
     const version = getInput("version");
 
-    core.debug(`param: track = "${track}"`)
-    core.debug(`param: release = "${release}"`)
-    core.debug(`param: namespace = "${namespace}"`)
-    core.debug(`param: chart = "${chart}"`)
-    core.debug(`param: values = "${values}"`)
-    core.debug(`param: dryRun = "${dryRun}"`)
-    core.debug(`param: task = "${task}"`)
-    core.debug(`param: version = "${version}"`)
+    core.debug(`param: track = "${track}"`);
+    core.debug(`param: release = "${release}"`);
+    core.debug(`param: namespace = "${namespace}"`);
+    core.debug(`param: chart = "${chart}"`);
+    core.debug(`param: values = "${values}"`);
+    core.debug(`param: dryRun = "${dryRun}"`);
+    core.debug(`param: task = "${task}"`);
+    core.debug(`param: version = "${version}"`);
 
     // Setup command options and arguments.
     const opts = { env: {} };
     const args = [
-      "upgrade", release, chart,
-      "--install", "--wait", "--atomic",
-      "--namespace", namespace,
-      "--values", "./values.yml",
+      "upgrade",
+      release,
+      chart,
+      "--install",
+      "--wait",
+      "--atomic",
+      `--namespace=${namespace}`,
+      "--values=./values.yml"
     ];
     if (dryRun) args.push("--dry-run");
-    if (version) args.push(`--set=version=${version}`)
+    if (version) args.push(`--set=version=${version}`);
 
     // Stable track only deploys service and ingress resources. Any other track
     // name can be treated like a canary deployment.
     if (track !== "stable") {
-      args.push(
-        "--set=service.enabled=false",
-        "--set=ingress.enabled=false",
-      )
+      args.push("--set=service.enabled=false", "--set=ingress.enabled=false");
     }
 
     // Setup necessary files.
@@ -129,12 +134,13 @@ async function run() {
     }
     await writeFile("./values.yml", values);
 
-    core.debug(`env: KUBECONFIG="${opts.env.KUBECONFIG}"`)
+    core.debug(`env: KUBECONFIG="${opts.env.KUBECONFIG}"`);
 
     // Actually execute the deployment here.
     if (task === "remove") {
       await exec.exec("helm", ["delete", release, "--purge"], {
-        ...opts, ignoreReturnCode: true,
+        ...opts,
+        ignoreReturnCode: true
       });
     } else {
       await exec.exec("helm", args, opts);
