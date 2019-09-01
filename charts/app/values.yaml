@@ -75,11 +75,11 @@ secrets: []
 # livenessProbe -- Customize the livenessProbe.
 livenessProbe:
   httpGet:
-    path: /healthz
+    path: /
     port: http
 
 # readinessProbe -- Customize the readiness probe.
 readinessProbe:
   httpGet:
-    path: /healthz
+    path: /
     port: http
