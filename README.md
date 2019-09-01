@@ -32,7 +32,7 @@ action will execute a `helm delete $service`
 
 ### Environment
 
-- `KUBECONFIG`: Kubeconfig file for Kubernetes cluster access.
+- `KUBECONFIG_FILE`: Kubeconfig file for Kubernetes cluster access.
 
 ## Example
 
