@@ -25,6 +25,10 @@ payload of the deployment resource.
 - `dry-run`: Helm dry-run option.
 - `token`: Github repository token. If included and the event is a deployment
   then the deployment_status event will be fired.
+- `value-files`: Additional value files to apply to the helm chart. Expects a
+  JSON encoded array or a string. (deployment).
+- `secrets`: Secret variables to include in value file interpolation. Expects a
+  JSON encoded map.
 
 Additional parameters: If the action is being triggered by a deployment event
 and the `task` parameter in the deployment event is set to `"remove"` then this
@@ -33,6 +37,14 @@ action will execute a `helm delete $service`
 ### Environment
 
 - `KUBECONFIG_FILE`: Kubeconfig file for Kubernetes cluster access.
+
+### Value file interpolation
+
+The following syntax allows variables to be used in value files:
+
+- `${{ secrets.KEY }}`: References secret variables passed in the secrets input.
+- `${{ deployment }}`: References the deployment event that triggered this
+  action.
 
 ## Example
 

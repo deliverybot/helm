@@ -25,6 +25,14 @@ inputs:
     description: >
       Github repository token. If included and the event is a deployment then
       the deployment_status event will be fired.
+  value-files:
+    description: >
+      Additional value files to apply to the helm chart. Expects a
+      JSON encoded array or a string. (deployment)
+  secrets:
+    description: >
+      Secret variables to include in value file interpolation. Expects a
+      JSON encoded map.
 runs:
   using: 'docker'
   image: 'Dockerfile'
