@@ -24,22 +24,29 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # TODO: Fill out environment variables.
+          envFrom:
+            - secretRef:
+                name: {{ include "app.fullname" . }}
+        {{ with .Values.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+        {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.internalPort }}
               protocol: TCP
-          # TODO: Configurable probes.
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
+          {{ with .Values.readinessProbe }}
           readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            {{- toYaml . | nindent 12 }}
+          {{- end -}}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end -}}
+          {{- with .Values.resources }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

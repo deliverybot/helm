@@ -60,3 +60,26 @@ tolerations: []
 
 # affinity -- Kubernetes affinity resource.
 affinity: {}
+
+# env -- Environment variables for the application.
+env: # []
+# - name: Test
+#   value: "foobar"
+
+# secrets -- Creates a secret for the application. All variables passed in env.
+# Uses envFrom in the deployment specification to pass these all through.
+secrets: []
+# - name: TEST
+#   value: "foobar"
+
+# livenessProbe -- Customize the livenessProbe.
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+
+# readinessProbe -- Customize the readiness probe.
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: http
