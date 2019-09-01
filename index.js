@@ -173,6 +173,7 @@ async function run() {
     ];
     if (dryRun) args.push("--dry-run");
     if (version) args.push(`--set=version=${version}`);
+    valueFiles.forEach(f => args.push(`--values=${f}`));
 
     // Stable track only deploys service and ingress resources. Any other track
     // name can be treated like a canary deployment.
