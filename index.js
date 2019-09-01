@@ -84,6 +84,8 @@ function getValueFiles(files) {
       // Assume it's a single string.
       fileList = [files];
     }
+  } else {
+    fileList = files;
   }
   if (!Array.isArray(fileList)) {
     return [];
