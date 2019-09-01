@@ -67,7 +67,7 @@ function getValues(values) {
 function getSecrets(secrets) {
   if (typeof secrets === "string") {
     try {
-      return JSON.stringify(secrets);
+      return JSON.parse(secrets);
     } catch (err) {
       return secrets;
     }
