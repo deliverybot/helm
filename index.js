@@ -3,8 +3,10 @@ const github = require("@actions/github");
 const exec = require("@actions/exec");
 const fs = require("fs");
 const util = require("util");
+const Mustache = require("mustache");
 
 const writeFile = util.promisify(fs.writeFile);
+const readFile = util.promisify(fs.readFile);
 const required = { required: true };
 
 /**
@@ -62,6 +64,33 @@ function getValues(values) {
   return values;
 }
 
+function getSecrets(secrets) {
+  if (typeof secrets === "string") {
+    try {
+      return JSON.stringify(secrets);
+    } catch (err) {
+      return secrets;
+    }
+  }
+  return secrets;
+}
+
+function getValueFiles(files) {
+  let fileList;
+  if (typeof files === "string") {
+    try {
+      fileList = JSON.parse(files);
+    } catch (err) {
+      // Assume it's a single string.
+      fileList = [files];
+    }
+  }
+  if (!Array.isArray(fileList)) {
+    return [];
+  }
+  return fileList;
+}
+
 function getInput(name, options) {
   const context = github.context;
   const deployment = context.payload.deployment;
@@ -79,13 +108,30 @@ function getInput(name, options) {
   return val;
 }
 
-function render() {}
+/**
+ * Render files renders data into the list of provided files.
+ * @param {Array<string>} files
+ * @param {any} data
+ */
+function renderFiles(files, data) {
+  core.debug(
+    `rendering value files [${files.join(",")}] with: ${JSON.stringify(data)}`
+  );
+  const tags = ["${{", "}}"];
+  const promises = files.map(async file => {
+    const content = await readFile(file, { encoding: "utf8" });
+    const rendered = Mustache.render(content, data, {}, tags);
+    await writeFile(file, rendered);
+  });
+  return Promise.all(promises);
+}
 
 /**
  * Run executes the helm deployment.
  */
 async function run() {
   try {
+    const context = github.context;
     await status("pending");
 
     const track = getInput("track") || "stable";
@@ -93,9 +139,12 @@ async function run() {
     const namespace = getInput("namespace", required);
     const chart = chartName(getInput("chart", required));
     const values = getValues(getInput("values"));
-    const dryRun = getInput("dry_run");
     const task = getInput("task");
     const version = getInput("version");
+    const valueFiles = getValueFiles(getInput("value_files"));
+
+    const dryRun = core.getInput("dry-run");
+    const secrets = getSecrets(core.getInput("secrets"));
 
     core.debug(`param: track = "${track}"`);
     core.debug(`param: release = "${release}"`);
@@ -105,6 +154,8 @@ async function run() {
     core.debug(`param: dryRun = "${dryRun}"`);
     core.debug(`param: task = "${task}"`);
     core.debug(`param: version = "${version}"`);
+    core.debug(`param: secrets = "${secrets}"`);
+    core.debug(`param: valueFiles = "${valueFiles}"`);
 
     // Setup command options and arguments.
     const opts = { env: {} };
@@ -135,6 +186,12 @@ async function run() {
     await writeFile("./values.yml", values);
 
     core.debug(`env: KUBECONFIG="${opts.env.KUBECONFIG}"`);
+
+    // Render value files using github variables.
+    await renderFiles(valueFiles.concat(["./values.yml"]), {
+      secrets,
+      deployment: context.payload.deployment,
+    });
 
     // Actually execute the deployment here.
     if (task === "remove") {
