@@ -13,6 +13,10 @@ spec:
       protocol: TCP
       name: http
   selector:
+    {{- if .Values.appName }}
+    app.kubernetes.io/name: {{ .Values.appName }}
+    {{- else }}
     app.kubernetes.io/name: {{ include "app.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- end }}
 {{- end }}

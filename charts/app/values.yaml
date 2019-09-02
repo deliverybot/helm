@@ -1,13 +1,18 @@
 # replicaCount -- Replica count for deployments.
 replicaCount: 1
 
+# appname -- Application name. Set this value to use canary deploys.
+# Keep this value consistent between canary deploys, if the stable release name
+# is prod-myapp-stable and the canary release name is prod-myapp-canary, then
+# the appName should be prod-myapp. The service will use this as the selector.
+appName: ""
+
 image:
   repository: nginx
   tag: latest
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
-nameOverride: ""
 fullnameOverride: ""
 
 service:

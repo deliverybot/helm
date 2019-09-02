@@ -137,7 +137,8 @@ async function run() {
     await status("pending");
 
     const track = getInput("track") || "stable";
-    const release = releaseName(getInput("release", required), track);
+    const appName = getInput("release", required);
+    const release = releaseName(appName, track);
     const namespace = getInput("namespace", required);
     const chart = chartName(getInput("chart", required));
     const values = getValues(getInput("values"));
@@ -150,6 +151,7 @@ async function run() {
 
     core.debug(`param: track = "${track}"`);
     core.debug(`param: release = "${release}"`);
+    core.debug(`param: appName = "${appName}"`);
     core.debug(`param: namespace = "${namespace}"`);
     core.debug(`param: chart = "${chart}"`);
     core.debug(`param: values = "${values}"`);
@@ -169,7 +171,8 @@ async function run() {
       "--wait",
       "--atomic",
       `--namespace=${namespace}`,
-      "--values=./values.yml"
+      "--values=./values.yml",
+      `--set=appName=${appName}`,
     ];
     if (dryRun) args.push("--dry-run");
     if (version) args.push(`--set=version=${version}`);
