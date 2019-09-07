@@ -172,10 +172,10 @@ async function run() {
       "--atomic",
       `--namespace=${namespace}`,
       "--values=./values.yml",
-      `--set=appName=${appName}`,
     ];
     if (dryRun) args.push("--dry-run");
-    if (version) args.push(`--set=version=${version}`);
+    if (appName) args.push(`--set=app.name=${appName}`);
+    if (version) args.push(`--set=app.version=${version}`);
     valueFiles.forEach(f => args.push(`--values=${f}`));
 
     // Stable track only deploys service and ingress resources. Any other track

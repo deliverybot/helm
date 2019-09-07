@@ -4,6 +4,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "app.labels" . | indent 4 }}
   {{- with .Values.ingress.annotations }}

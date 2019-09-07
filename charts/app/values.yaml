@@ -1,19 +1,21 @@
 # replicaCount -- Replica count for deployments.
 replicaCount: 1
 
-# appname -- Application name. Set this value to use canary deploys.
-# Keep this value consistent between canary deploys, if the stable release name
-# is prod-myapp-stable and the canary release name is prod-myapp-canary, then
-# the appName should be prod-myapp. The service will use this as the selector.
-appName: ""
+app:
+  # app.name -- Application name: Can be consistent between tracks. (required)
+  name: null
+  # app.version -- Application version: Unique tag for this release. (required)
+  version: null
 
 image:
+  # image.repository -- Docker image repository.
   repository: nginx
+  # image.tag -- Docker image tag.
   tag: latest
   pullPolicy: IfNotPresent
 
+# imagePullSecrets -- Defines secrets to use for pulling docker images.
 imagePullSecrets: []
-fullnameOverride: ""
 
 service:
   # service.enabled -- Enable service resource.
@@ -67,9 +69,9 @@ tolerations: []
 affinity: {}
 
 # env -- Environment variables for the application.
-env: # []
-# - name: Test
-#   value: "foobar"
+env: []
+# - name: ENVIRONMENT
+#   value: production
 
 # secrets -- Creates a secret for the application. All variables passed in env.
 # Uses envFrom in the deployment specification to pass these all through.
@@ -88,3 +90,15 @@ readinessProbe:
   httpGet:
     path: /
     port: http
+
+migrate:
+  # migrate.enabled -- Run a pod before the application is released to migrate.
+  enabled: false
+  # migrate.command -- Command to run on the migrate pod.
+  command: "rails db:migrate"
+
+# workers -- Deploy background jobs with the same config as the main app.
+workers: []
+#  - name: delayed-job
+#    command: ["rails", "jobs:work"]
+#    enableProbes: true
