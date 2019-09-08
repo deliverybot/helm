@@ -6,7 +6,7 @@ metadata:
   name: {{ include "app.fullname" $ }}-{{ $worker.name }}
   namespace: {{ $.Release.Namespace }}
   annotations:
-    "deliverybot.io/secret-checksum": {{ toJson $.Values.secrets | sha256sum }}
+    "deliverybot.dev/secret-checksum": {{ toJson $.Values.secrets | sha256sum }}
   labels:
     app.kubernetes.io/component: {{ $worker.name }}
 {{ include "app.labels" $ | indent 4 }}

@@ -46,7 +46,7 @@ metadata:
   name: rails-example
   namespace: default
   annotations:
-    "deliverybot.io/secret-checksum": c840b214c2ae393334d47c94952d2c73c441af1724ad43c9bee736cb3b3fd7d4
+    "deliverybot.dev/secret-checksum": c840b214c2ae393334d47c94952d2c73c441af1724ad43c9bee736cb3b3fd7d4
   labels:
     app.kubernetes.io/name: example-rails
     app.kubernetes.io/instance: rails-example
@@ -103,7 +103,7 @@ metadata:
   name: rails-example-delayed-job
   namespace: default
   annotations:
-    "deliverybot.io/secret-checksum": c840b214c2ae393334d47c94952d2c73c441af1724ad43c9bee736cb3b3fd7d4
+    "deliverybot.dev/secret-checksum": c840b214c2ae393334d47c94952d2c73c441af1724ad43c9bee736cb3b3fd7d4
   labels:
     app.kubernetes.io/component: delayed-job
     app.kubernetes.io/name: example-rails
