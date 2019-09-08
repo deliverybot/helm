@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/deliverybot/helm/compare/v0.0.3...v0.0.4) (2019-09-08)
+
+
+### Features
+
+* Add migration ([10d3007](https://github.com/deliverybot/helm/commit/10d3007))
+* Add remove canary option ([5f991c6](https://github.com/deliverybot/helm/commit/5f991c6))
+* Add workers ([13efedc](https://github.com/deliverybot/helm/commit/13efedc))
+* Introduce appName for canary deployments ([6538c4c](https://github.com/deliverybot/helm/commit/6538c4c))
+* Update labels and names to app ([9387304](https://github.com/deliverybot/helm/commit/9387304))
+
 ### [0.0.3](https://github.com/deliverybot/helm/compare/v0.0.2...v0.0.3) (2019-09-01)
 
 
