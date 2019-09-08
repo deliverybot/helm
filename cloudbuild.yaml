@@ -9,4 +9,4 @@ steps:
 
 - name: gcr.io/cloud-builders/docker
   entrypoint: sh
-  args: ['-c', 'docker push -t gcr.io/deliverybot/helm:$(cat _TAG)']
+  args: ['-c', 'docker push gcr.io/deliverybot/helm:$(cat _TAG)']
