@@ -1,6 +1,8 @@
 name: Deliverybot Helm Action
 description: Deploys a helm chart
 author: deliverybot
+icon: box
+color: gray-dark
 inputs:
   release:
     description: Helm release name. Will be combined with track if set. (required)
