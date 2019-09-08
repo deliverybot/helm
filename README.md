@@ -74,7 +74,7 @@ jobs:
 
 ## Example canary
 
-If a track is chosen that is not equal to stable, this updates the helm chart
+If a track is chosen that is equal to canary, this updates the helm chart
 in a few ways:
 
 1. Release name is changed to `{release}-{track}` (eg. myapp-canary).
@@ -108,4 +108,3 @@ jobs:
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 ```
-

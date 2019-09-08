@@ -180,9 +180,10 @@ async function run() {
     if (version) args.push(`--set=app.version=${version}`);
     valueFiles.forEach(f => args.push(`--values=${f}`));
 
-    // Stable track only deploys service and ingress resources. Any other track
-    // name can be treated like a canary deployment.
-    if (track !== "stable") {
+    // Special behaviour is triggered if the track is labelled 'canary'. The
+    // service and ingress resources are disabled. Access to the canary
+    // deployments can be routed via the main stable service resource.
+    if (track === "canary") {
       args.push("--set=service.enabled=false", "--set=ingress.enabled=false");
     }
 
