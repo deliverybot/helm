@@ -1,0 +1,5 @@
+steps:
+- name: gcr.io/cloud-builders/docker
+  args: ["build", "-t", "gcr.io/deliverybot/helm:$TAG_NAME", "."]
+images:
+- "gcr.io/deliverybot/helm:$TAG_NAME"
