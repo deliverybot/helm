@@ -1,7 +1,9 @@
 steps:
-- name: 'alpine/git'
-  entrypoint: sh
-  args: ['-c', 'if [[ "$(git tag --points-at $SHORT_SHA)" != "" ]]; then git tag --points-at $SHORT_SHA > _TAG; else echo $BRANCH_NAME > _TAG; fi']
+- name: 'colinjfw/ci:latest'
+  entrypoint: /workspace/hack/get-tag.sh
+  env:
+    - BRANCH_NAME=$BRANCH_NAME
+    - COMMIT_SHA=$COMMIT_SHA
 
 - name: gcr.io/cloud-builders/docker
   entrypoint: sh
