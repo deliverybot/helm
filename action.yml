@@ -1,38 +1,29 @@
-name: 'Deliverybot Helm Action'
-description: 'Deploys a helm chart'
-author: 'deliverybot'
+name: Deliverybot Helm Action
+description: Deploys a helm chart
+author: deliverybot
 inputs:
   release:
-    description: >
-      Helm release name. Will be combined with track if set. (required)
+    description: Helm release name. Will be combined with track if set. (required)
       (deployment)
   namespace:
-    description: >
-      Kubernetes namespace name. (required) (deployment)
+    description: Kubernetes namespace name. (required) (deployment)
   chart:
-    description: >
-      Helm chart path. If set to "app" this will use the built in helm
+    description: Helm chart path. If set to "app" this will use the built in helm
       chart found in this repository. (required) (deployment)
   values:
-    description: >
-      Helm chart values, expected to be a YAML or JSON string.
-      (deployment)
+    description: Helm chart values, expected to be a YAML or JSON string. (deployment)
   dry-run:
-    description: >
-      Task name. If the task is "remove" it will remove the configured helm
-      release. (deployment)
+    description: Task name. If the task is "remove" it will remove the configured
+      helm release. (deployment)
   token:
-    description: >
-      Github repository token. If included and the event is a deployment then
+    description: Github repository token. If included and the event is a deployment
       the deployment_status event will be fired.
   value-files:
-    description: >
-      Additional value files to apply to the helm chart. Expects a
-      JSON encoded array or a string. (deployment)
+    description: Additional value files to apply to the helm chart. Expects JSON encoded
+      array or a string. (deployment)
   secrets:
-    description: >
-      Secret variables to include in value file interpolation. Expects a
+    description: Secret variables to include in value file interpolation. Expects
       JSON encoded map.
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: docker
+  image: Dockerfile
