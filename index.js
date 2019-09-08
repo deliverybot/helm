@@ -21,7 +21,7 @@ async function status(state) {
     const deployment = context.payload.deployment;
     const token = core.getInput("token");
     if (!token || !deployment) {
-      core.debug("Not setting deployment status");
+      core.debug("not setting deployment status");
       return;
     }
 
@@ -159,8 +159,8 @@ async function run() {
     core.debug(`param: dryRun = "${dryRun}"`);
     core.debug(`param: task = "${task}"`);
     core.debug(`param: version = "${version}"`);
-    core.debug(`param: secrets = "${secrets}"`);
-    core.debug(`param: valueFiles = "${valueFiles}"`);
+    core.debug(`param: secrets = "${JSON.stringify(secrets)}"`);
+    core.debug(`param: valueFiles = "${JSON.stringify(valueFiles)}"`);
     core.debug(`param: removeCanary = ${removeCanary}`);
 
     // Setup command options and arguments.
