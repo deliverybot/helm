@@ -1,5 +1,11 @@
 steps:
+- name: 'alpine/git'
+  args: ['sh', '-c', 'if [[ "$(git tag --points-at $SHORT_SHA)" != "" ]]; then git tag --points-at $SHORT_SHA > _TAG; else echo $BRANCH_NAME > _TAG; fi']
+
 - name: gcr.io/cloud-builders/docker
-  args: ["build", "-t", "gcr.io/deliverybot/helm:$TAG_NAME", "."]
-images:
-- "gcr.io/deliverybot/helm:$TAG_NAME"
+  entrypoint: sh
+  args: ['-c', 'docker build -t gcr.io/deliverybot/helm:$(cat _TAG) .']
+
+- name: gcr.io/cloud-builders/docker
+  entrypoint: sh
+  args: ['-c', 'docker push -t gcr.io/deliverybot/helm:$(cat _TAG)']
