@@ -1,6 +1,7 @@
 steps:
 - name: 'alpine/git'
-  args: ['sh', '-c', 'if [[ "$(git tag --points-at $SHORT_SHA)" != "" ]]; then git tag --points-at $SHORT_SHA > _TAG; else echo $BRANCH_NAME > _TAG; fi']
+  entrypoint: sh
+  args: ['-c', 'if [[ "$(git tag --points-at $SHORT_SHA)" != "" ]]; then git tag --points-at $SHORT_SHA > _TAG; else echo $BRANCH_NAME > _TAG; fi']
 
 - name: gcr.io/cloud-builders/docker
   entrypoint: sh
