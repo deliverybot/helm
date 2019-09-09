@@ -206,7 +206,7 @@ async function run() {
     // Remove the canary deployment before continuing.
     if (removeCanary) {
       core.debug(`removing canary ${appName}-canary`);
-      await exec.exec(helm, ["delete", `${appName}-canary`, "--purge"], {
+      await exec.exec(helm, ["delete", `${appName}-canary`], {
         ...opts,
         ignoreReturnCode: true
       });
@@ -214,7 +214,7 @@ async function run() {
 
     // Actually execute the deployment here.
     if (task === "remove") {
-      await exec.exec(helm, ["delete", release, "--purge"], {
+      await exec.exec(helm, ["delete", release], {
         ...opts,
         ignoreReturnCode: true
       });
