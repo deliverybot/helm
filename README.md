@@ -11,31 +11,35 @@ View an example repository using this action at
 
 ### Inputs
 
-Inputs labelled below with "(deployment)" are additionally loaded from the
-payload of the deployment resource.
+Inputs below are additionally loaded from the payload of the deployment event
+payload if the action was triggered by a deployment.
 
 - `release`: Helm release name. Will be combined with track if set. (required)
-  (deployment)
-- `namespace`: Kubernetes namespace name. (required) (deployment)
+- `namespace`: Kubernetes namespace name. (required)
 - `chart`: Helm chart path. If set to "app" this will use the built in helm
-  chart found in this repository. (required) (deployment)
+  chart found in this repository. (required)
 - `values`: Helm chart values, expected to be a YAML or JSON string.
-  (deployment)
 - `track`: Track for the deployment. If the track is not "stable" it activates
-  the canary workflow described below. (deployment)
+  the canary workflow described below.
 - `task`: Task name. If the task is "remove" it will remove the configured helm
-  release. (deployment)
+  release.
 - `dry-run`: Helm dry-run option.
 - `token`: Github repository token. If included and the event is a deployment
   then the deployment_status event will be fired.
 - `value-files`: Additional value files to apply to the helm chart. Expects a
-  JSON encoded array or a string. (deployment).
+  JSON encoded array or a string.
 - `secrets`: Secret variables to include in value file interpolation. Expects a
   JSON encoded map.
+- `helm`: Helm binary to execute, one of: [`helm`, `helm3`].
 
 Additional parameters: If the action is being triggered by a deployment event
 and the `task` parameter in the deployment event is set to `"remove"` then this
 action will execute a `helm delete $service`
+
+#### Versions
+
+- `helm`: v2.14.3
+- `helm3`: v3.0.0-beta.3
 
 ### Environment
 
