@@ -146,6 +146,7 @@ async function run() {
     const version = getInput("version");
     const valueFiles = getValueFiles(getInput("value_files"));
     const removeCanary = getInput("remove_canary");
+    const helm = getInput("helm") || "helm";
 
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
@@ -204,8 +205,8 @@ async function run() {
 
     // Remove the canary deployment before continuing.
     if (removeCanary) {
-      core.debug(`removing canart ${appName}-canary`);
-      await exec.exec("helm", ["delete", `${appName}-canary`, "--purge"], {
+      core.debug(`removing canary ${appName}-canary`);
+      await exec.exec(helm, ["delete", `${appName}-canary`, "--purge"], {
         ...opts,
         ignoreReturnCode: true
       });
@@ -213,12 +214,12 @@ async function run() {
 
     // Actually execute the deployment here.
     if (task === "remove") {
-      await exec.exec("helm", ["delete", release, "--purge"], {
+      await exec.exec(helm, ["delete", release, "--purge"], {
         ...opts,
         ignoreReturnCode: true
       });
     } else {
-      await exec.exec("helm", args, opts);
+      await exec.exec(helm, args, opts);
     }
 
     await status("success");
