@@ -4,6 +4,9 @@ Deploys a helm chart using GitHub actions. Supports canary deployments and
 provides a built in helm chart for apps that listen over http to get your ramped
 up quickly.
 
+View an example repository using this action at
+[github.com/deliverybot/example-helm](https://github.com/deliverybot/example-helm).
+
 ## Parameters
 
 ### Inputs
