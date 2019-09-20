@@ -28,4 +28,4 @@ inputs:
       JSON encoded map.
 runs:
   using: docker
-  image: gcr.io/deliverybot/helm:v1.0.0
+  image: docker://gcr.io/deliverybot/helm:v1.0.0
