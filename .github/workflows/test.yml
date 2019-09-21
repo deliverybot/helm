@@ -19,7 +19,7 @@ jobs:
       uses: 'actions/checkout@v1'
 
     - name: 'Deploy Canary'
-      uses: 'deliverybot/helm@ci-v2'
+      uses: 'deliverybot/helm@master'
       with:
         helm: helm3
         token: '${{ github.token }}'
@@ -39,7 +39,7 @@ jobs:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 
     - name: 'Deploy Production'
-      uses: 'deliverybot/helm@ci-v2'
+      uses: 'deliverybot/helm@master'
       with:
         helm: helm3
         token: '${{ github.token }}'

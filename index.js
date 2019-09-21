@@ -129,6 +129,20 @@ function renderFiles(files, data) {
 }
 
 /**
+ * Makes a delete command for compatibility between helm 2 and 3.
+ *
+ * @param {string} helm
+ * @param {string} namespace
+ * @param {string} release
+ */
+function deleteCmd(helm, namespace, release) {
+  if (helm === "helm3") {
+    return ["delete", "-n", namespace, release];
+  }
+  return ["delete", release];
+}
+
+/**
  * Run executes the helm deployment.
  */
 async function run() {
@@ -206,7 +220,7 @@ async function run() {
     // Remove the canary deployment before continuing.
     if (removeCanary) {
       core.debug(`removing canary ${appName}-canary`);
-      await exec.exec(helm, ["delete", `${appName}-canary`], {
+      await exec.exec(helm, deleteCmd(helm, namespace, `${appName}-canary`), {
         ...opts,
         ignoreReturnCode: true
       });
@@ -214,7 +228,7 @@ async function run() {
 
     // Actually execute the deployment here.
     if (task === "remove") {
-      await exec.exec(helm, ["delete", release], {
+      await exec.exec(helm, deleteCmd(helm, namespace, release), {
         ...opts,
         ignoreReturnCode: true
       });
