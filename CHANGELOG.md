@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/deliverybot/helm/compare/v1.0.0...v1.1.0) (2019-09-21)
+
+
+### Bug Fixes
+
+* CI pipeline using GitHub actions ([7eddfb9](https://github.com/deliverybot/helm/commit/7eddfb9))
+* Helm3 compatibility on deletes ([c9eafdd](https://github.com/deliverybot/helm/commit/c9eafdd))
+
+
+### Features
+
+* Add helm3 binary ([5e2cd2f](https://github.com/deliverybot/helm/commit/5e2cd2f))
+* Remove purge flag from helm delete ([3821f46](https://github.com/deliverybot/helm/commit/3821f46))
+
 ## [1.0.0](https://github.com/deliverybot/helm/compare/v0.1.2...v1.0.0) (2019-09-08)
 
 ### [0.1.2](https://github.com/deliverybot/helm/compare/v0.1.1...v0.1.2) (2019-09-08)
