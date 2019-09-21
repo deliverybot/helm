@@ -1,0 +1,7 @@
+env:
+- name: ENVIRONMENT
+  value: production
+
+secrets:
+- name: API_KEY
+  value: '${{ secrets.API_KEY }}'

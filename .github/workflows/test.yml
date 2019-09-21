@@ -1,0 +1,60 @@
+name: 'Test'
+on: ['push']
+
+jobs:
+
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: 'actions/checkout@v1'
+
+    - name: 'Docker Build'
+      run: 'docker build .'
+
+  deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - name: 'Checkout'
+      uses: 'actions/checkout@v1'
+
+    - name: 'Deploy Canary'
+      uses: 'deliverybot/helm@ci-v2'
+      with:
+        helm: helm3
+        token: '${{ github.token }}'
+        secrets: '${{ toJSON(secrets) }}'
+        chart: 'app'
+        namespace: production
+        release: production-myapp
+        version: '${{ github.sha }}'
+        track: canary
+        value-files: '["./tests/values.yml"]'
+        values: |
+          replicaCount: 1
+          image:
+            repository: nginx
+            tag: latest
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+
+    - name: 'Deploy Production'
+      uses: 'deliverybot/helm@ci-v2'
+      with:
+        helm: helm3
+        token: '${{ github.token }}'
+        secrets: '${{ toJSON(secrets) }}'
+        chart: 'app'
+        namespace: production
+        release: production-myapp
+        version: '${{ github.sha }}'
+        track: stable
+        value-files: '["./tests/values.yml"]'
+        remove-canary: "true"
+        values: |
+          replicaCount: 5
+          image:
+            repository: nginx
+            tag: latest
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
