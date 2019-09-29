@@ -236,7 +236,7 @@ async function run() {
       await exec.exec(helm, args, opts);
     }
 
-    await status("success");
+    await status(task === "remove" ? "inactive" : "success");
   } catch (error) {
     core.error(error);
     core.setFailed(error.message);
