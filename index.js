@@ -33,7 +33,10 @@ async function status(state) {
       deployment_id: deployment.id,
       state,
       log_url: url,
-      target_url: url
+      target_url: url,
+      headers: {
+        accept: 'application/vnd.github.ant-man-preview+json'
+      }
     });
   } catch (error) {
     core.warning(`Failed to set deployment status: ${error.message}`);
