@@ -139,7 +139,7 @@ function deleteCmd(helm, namespace, release) {
   if (helm === "helm3") {
     return ["delete", "-n", namespace, release];
   }
-  return ["delete", release];
+  return ["delete", "--purge", release];
 }
 
 /**
