@@ -26,7 +26,7 @@ jobs:
         secrets: '${{ toJSON(secrets) }}'
         chart: 'app'
         namespace: helm-tests
-        release: production-myapp
+        release: helm-test
         version: '${{ github.sha }}'
         track: canary
         value-files: '["./tests/values.yml"]'
@@ -46,7 +46,7 @@ jobs:
         secrets: '${{ toJSON(secrets) }}'
         chart: 'app'
         namespace: helm-tests
-        release: production-myapp
+        release: helm-test
         version: '${{ github.sha }}'
         track: stable
         value-files: '["./tests/values.yml"]'
@@ -68,7 +68,7 @@ jobs:
         secrets: '${{ toJSON(secrets) }}'
         chart: 'app'
         namespace: helm-tests
-        release: production-myapp
+        release: helm-test
         version: '${{ github.sha }}'
         track: stable
         value-files: '["./tests/values.yml"]'
@@ -87,7 +87,7 @@ jobs:
         secrets: '${{ toJSON(secrets) }}'
         chart: 'app'
         namespace: helm-tests
-        release: production-myapp
+        release: helm-test
         version: '${{ github.sha }}'
         track: canary
         value-files: '["./tests/values.yml"]'
@@ -106,7 +106,7 @@ jobs:
         secrets: '${{ toJSON(secrets) }}'
         chart: 'app'
         namespace: helm-tests
-        release: production-myapp
+        release: helm-test
         version: '${{ github.sha }}'
         track: stable
         value-files: '["./tests/values.yml"]'
@@ -127,7 +127,7 @@ jobs:
         secrets: '${{ toJSON(secrets) }}'
         chart: 'app'
         namespace: helm-tests
-        release: production-myapp
+        release: helm-test
         version: '${{ github.sha }}'
         track: stable
         value-files: '["./tests/values.yml"]'
