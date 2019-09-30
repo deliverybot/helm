@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/deliverybot/helm/compare/v1.1.0...v1.2.0) (2019-09-30)
+
+
+### Bug Fixes
+
+* If remove mark inactive ([3edcc80](https://github.com/deliverybot/helm/commit/3edcc80))
+* Include preview for inactive state ([4b47dd7](https://github.com/deliverybot/helm/commit/4b47dd7))
+
+
+### Features
+
+* Add delete --purge for helm2 ([de6b027](https://github.com/deliverybot/helm/commit/de6b027))
+
 ## [1.1.0](https://github.com/deliverybot/helm/compare/v1.0.0...v1.1.0) (2019-09-21)
 
 
