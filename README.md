@@ -31,6 +31,7 @@ payload if the action was triggered by a deployment.
 - `secrets`: Secret variables to include in value file interpolation. Expects a
   JSON encoded map.
 - `helm`: Helm binary to execute, one of: [`helm`, `helm3`].
+- `version`: Version of the app, usually commit sha works here.
 
 Additional parameters: If the action is being triggered by a deployment event
 and the `task` parameter in the deployment event is set to `"remove"` then this
