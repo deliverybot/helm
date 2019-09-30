@@ -58,3 +58,24 @@ jobs:
             tag: latest
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+
+    - name: 'Remove Production'
+      uses: 'deliverybot/helm@master'
+      with:
+        helm: helm3
+        task: 'remove'
+        token: '${{ github.token }}'
+        secrets: '${{ toJSON(secrets) }}'
+        chart: 'app'
+        namespace: production
+        release: production-myapp
+        version: '${{ github.sha }}'
+        track: stable
+        value-files: '["./tests/values.yml"]'
+        values: |
+          replicaCount: 5
+          image:
+            repository: nginx
+            tag: latest
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
