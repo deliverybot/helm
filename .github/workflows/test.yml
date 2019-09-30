@@ -18,14 +18,14 @@ jobs:
     - name: 'Checkout'
       uses: 'actions/checkout@v1'
 
-    - name: 'Deploy Canary'
+    - name: 'Helm3 deploy canary'
       uses: 'deliverybot/helm@master'
       with:
         helm: helm3
         token: '${{ github.token }}'
         secrets: '${{ toJSON(secrets) }}'
         chart: 'app'
-        namespace: production
+        namespace: helm-tests
         release: production-myapp
         version: '${{ github.sha }}'
         track: canary
@@ -38,14 +38,14 @@ jobs:
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 
-    - name: 'Deploy Production'
+    - name: 'Helm3 deploy production'
       uses: 'deliverybot/helm@master'
       with:
         helm: helm3
         token: '${{ github.token }}'
         secrets: '${{ toJSON(secrets) }}'
         chart: 'app'
-        namespace: production
+        namespace: helm-tests
         release: production-myapp
         version: '${{ github.sha }}'
         track: stable
@@ -59,7 +59,7 @@ jobs:
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 
-    - name: 'Remove Production'
+    - name: 'Helm3 remove production'
       uses: 'deliverybot/helm@master'
       with:
         helm: helm3
@@ -67,7 +67,66 @@ jobs:
         token: '${{ github.token }}'
         secrets: '${{ toJSON(secrets) }}'
         chart: 'app'
-        namespace: production
+        namespace: helm-tests
+        release: production-myapp
+        version: '${{ github.sha }}'
+        track: stable
+        value-files: '["./tests/values.yml"]'
+        values: |
+          replicaCount: 5
+          image:
+            repository: nginx
+            tag: latest
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+
+    - name: 'Helm deploy canary'
+      uses: 'deliverybot/helm@master'
+      with:
+        token: '${{ github.token }}'
+        secrets: '${{ toJSON(secrets) }}'
+        chart: 'app'
+        namespace: helm-tests
+        release: production-myapp
+        version: '${{ github.sha }}'
+        track: canary
+        value-files: '["./tests/values.yml"]'
+        values: |
+          replicaCount: 1
+          image:
+            repository: nginx
+            tag: latest
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+
+    - name: 'Helm deploy production'
+      uses: 'deliverybot/helm@master'
+      with:
+        token: '${{ github.token }}'
+        secrets: '${{ toJSON(secrets) }}'
+        chart: 'app'
+        namespace: helm-tests
+        release: production-myapp
+        version: '${{ github.sha }}'
+        track: stable
+        value-files: '["./tests/values.yml"]'
+        remove-canary: "true"
+        values: |
+          replicaCount: 5
+          image:
+            repository: nginx
+            tag: latest
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+
+    - name: 'Helm remove production'
+      uses: 'deliverybot/helm@master'
+      with:
+        task: 'remove'
+        token: '${{ github.token }}'
+        secrets: '${{ toJSON(secrets) }}'
+        chart: 'app'
+        namespace: helm-tests
         release: production-myapp
         version: '${{ github.sha }}'
         track: stable

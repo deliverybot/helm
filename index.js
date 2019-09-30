@@ -93,7 +93,7 @@ function getValueFiles(files) {
   if (!Array.isArray(fileList)) {
     return [];
   }
-  return fileList;
+  return fileList.filter(f => !!f);
 }
 
 function getInput(name, options) {
