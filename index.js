@@ -191,12 +191,12 @@ async function run() {
       "--wait",
       "--atomic",
       `--namespace=${namespace}`,
-      "--values=./values.yml",
     ];
     if (dryRun) args.push("--dry-run");
     if (appName) args.push(`--set=app.name=${appName}`);
     if (version) args.push(`--set=app.version=${version}`);
     valueFiles.forEach(f => args.push(`--values=${f}`));
+    args.push("--values=./values.yml");
 
     // Special behaviour is triggered if the track is labelled 'canary'. The
     // service and ingress resources are disabled. Access to the canary
