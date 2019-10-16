@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/deliverybot/helm/compare/v1.2.0...v1.3.0) (2019-10-16)
+
+
+### Features
+
+* Generated value file is last arg ([#13](https://github.com/deliverybot/helm/issues/13)) ([9e1a0cf](https://github.com/deliverybot/helm/commit/9e1a0cf))
+
 ## [1.2.0](https://github.com/deliverybot/helm/compare/v1.1.0...v1.2.0) (2019-09-30)
 
 
