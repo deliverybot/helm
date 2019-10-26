@@ -116,3 +116,36 @@ jobs:
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 ```
+
+## Example pr cleanup
+
+If you are creating an environment per pull request with Helm you may have the
+issue where pull request environments like `pr123` sit around in your cluster.
+By using GitHub actions we can clean those up by listening for pull request
+close events.
+
+```yaml
+# .github/workflows/pr-cleanup.yml
+name: PRCleanup
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - name: 'Deploy'
+      uses: 'deliverybot/helm@v1'
+      with:
+        # Task remove means to remove the helm release.
+        task: 'remove'
+        release: 'review-myapp-${{ github.event.pull_request.number }}'
+        version: '${{ github.sha }}'
+        track: 'stable'
+        chart: 'app'
+        namespace: 'example-helm'
+        token: '${{ github.token }}'
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+```
