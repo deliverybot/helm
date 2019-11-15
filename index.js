@@ -182,7 +182,9 @@ async function run() {
     core.debug(`param: removeCanary = ${removeCanary}`);
 
     // Setup command options and arguments.
-    const opts = { env: {} };
+    const opts = { env: {
+      KUBECONFIG: process.env.KUBECONFIG,
+    }};
     const args = [
       "upgrade",
       release,
