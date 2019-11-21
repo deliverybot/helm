@@ -1,7 +1,1 @@
-env:
-- name: ENVIRONMENT
-  value: production
-
-secrets:
-- name: API_KEY
-  value: '${{ secrets.API_KEY }}'
+{"replicaCount": 1, "image": {"repository": "nginx", "tag": "latest"}}

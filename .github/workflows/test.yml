@@ -3,138 +3,23 @@ on: ['push']
 
 jobs:
 
-  build:
+  test:
     runs-on: 'ubuntu-latest'
 
     steps:
     - uses: 'actions/checkout@v1'
 
-    - name: 'Docker Build'
-      run: 'docker build .'
+    - name: 'Build'
+      run: 'docker build -t helm .'
 
-  deployment:
-    runs-on: 'ubuntu-latest'
-    steps:
-    - name: 'Checkout'
-      uses: 'actions/checkout@v1'
+    - name: 'Test commands'
+      run: 'docker run --rm -i -v $PWD:/workspace --workdir=/workspace --entrypoint=/workspace/tests/test-snap.sh helm'
 
-    - name: 'Helm3 deploy canary'
-      uses: 'deliverybot/helm@master'
-      with:
-        helm: helm3
-        token: '${{ github.token }}'
-        secrets: '${{ toJSON(secrets) }}'
-        chart: 'app'
-        namespace: helm-tests
-        release: helm-test
-        version: '${{ github.sha }}'
-        track: canary
-        value-files: '["./tests/values.yml"]'
-        values: |
-          replicaCount: 1
-          image:
-            repository: nginx
-            tag: latest
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+    - name: 'Test chart'
+      run: 'docker run --rm -i -v $PWD:/workspace --workdir=/workspace --entrypoint=/workspace/tests/charts/test.sh helm'
 
-    - name: 'Helm3 deploy production'
-      uses: 'deliverybot/helm@master'
-      with:
-        helm: helm3
-        token: '${{ github.token }}'
-        secrets: '${{ toJSON(secrets) }}'
-        chart: 'app'
-        namespace: helm-tests
-        release: helm-test
-        version: '${{ github.sha }}'
-        track: stable
-        value-files: '["./tests/values.yml"]'
-        remove-canary: "true"
-        values: |
-          replicaCount: 5
-          image:
-            repository: nginx
-            tag: latest
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+    - name: 'Test helm version'
+      run: 'docker run --rm -i --entrypoint=helm helm version -c'
 
-    - name: 'Helm3 remove production'
-      uses: 'deliverybot/helm@master'
-      with:
-        helm: helm3
-        task: 'remove'
-        token: '${{ github.token }}'
-        secrets: '${{ toJSON(secrets) }}'
-        chart: 'app'
-        namespace: helm-tests
-        release: helm-test
-        version: '${{ github.sha }}'
-        track: stable
-        value-files: '["./tests/values.yml"]'
-        values: |
-          replicaCount: 5
-          image:
-            repository: nginx
-            tag: latest
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
-
-    - name: 'Helm deploy canary'
-      uses: 'deliverybot/helm@master'
-      with:
-        token: '${{ github.token }}'
-        secrets: '${{ toJSON(secrets) }}'
-        chart: 'app'
-        namespace: helm-tests
-        release: helm-test
-        version: '${{ github.sha }}'
-        track: canary
-        value-files: '["./tests/values.yml"]'
-        values: |
-          replicaCount: 1
-          image:
-            repository: nginx
-            tag: latest
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
-
-    - name: 'Helm deploy production'
-      uses: 'deliverybot/helm@master'
-      with:
-        token: '${{ github.token }}'
-        secrets: '${{ toJSON(secrets) }}'
-        chart: 'app'
-        namespace: helm-tests
-        release: helm-test
-        version: '${{ github.sha }}'
-        track: stable
-        value-files: '["./tests/values.yml"]'
-        remove-canary: "true"
-        values: |
-          replicaCount: 5
-          image:
-            repository: nginx
-            tag: latest
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
-
-    - name: 'Helm remove production'
-      uses: 'deliverybot/helm@master'
-      with:
-        task: 'remove'
-        token: '${{ github.token }}'
-        secrets: '${{ toJSON(secrets) }}'
-        chart: 'app'
-        namespace: helm-tests
-        release: helm-test
-        version: '${{ github.sha }}'
-        track: stable
-        value-files: '["./tests/values.yml"]'
-        values: |
-          replicaCount: 5
-          image:
-            repository: nginx
-            tag: latest
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+    - name: 'Test helm3 version'
+      run: 'docker run --rm -i --entrypoint=helm3 helm version'
