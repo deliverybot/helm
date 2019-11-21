@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/deliverybot/helm/compare/v1.3.0...v1.4.0) (2019-11-21)
+
+
+### Bug Fixes
+
+* Pass kubeconfig var ([2b78a84](https://github.com/deliverybot/helm/commit/2b78a84))
+
+
+### Features
+
+* Update Helm 2 binary ([#15](https://github.com/deliverybot/helm/issues/15)) ([b5d5c58](https://github.com/deliverybot/helm/commit/b5d5c58))
+* Update Helm 3 binary ([#14](https://github.com/deliverybot/helm/issues/14)) ([8dc3e86](https://github.com/deliverybot/helm/commit/8dc3e86))
+
 ## [1.3.0](https://github.com/deliverybot/helm/compare/v1.2.0...v1.3.0) (2019-10-16)
 
 
