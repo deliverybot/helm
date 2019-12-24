@@ -164,6 +164,7 @@ async function run() {
     const valueFiles = getValueFiles(getInput("value_files"));
     const removeCanary = getInput("remove_canary");
     const helm = getInput("helm") || "helm";
+    const timeout = getInput("timeout");
 
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
@@ -180,6 +181,7 @@ async function run() {
     core.debug(`param: secrets = "${JSON.stringify(secrets)}"`);
     core.debug(`param: valueFiles = "${JSON.stringify(valueFiles)}"`);
     core.debug(`param: removeCanary = ${removeCanary}`);
+    core.debug(`param: timeout = "${timeout}`);
 
     // Setup command options and arguments.
     const opts = { env: {
@@ -197,6 +199,7 @@ async function run() {
     if (dryRun) args.push("--dry-run");
     if (appName) args.push(`--set=app.name=${appName}`);
     if (version) args.push(`--set=app.version=${version}`);
+    if (timeout) args.push(`--timeout=${timeout}`);
     valueFiles.forEach(f => args.push(`--values=${f}`));
     args.push("--values=./values.yml");
 
