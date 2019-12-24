@@ -181,7 +181,7 @@ async function run() {
     core.debug(`param: secrets = "${JSON.stringify(secrets)}"`);
     core.debug(`param: valueFiles = "${JSON.stringify(valueFiles)}"`);
     core.debug(`param: removeCanary = ${removeCanary}`);
-    core.debug(`param: timeout = "${timeout}`);
+    core.debug(`param: timeout = "${timeout}"`);
 
     // Setup command options and arguments.
     const opts = { env: {

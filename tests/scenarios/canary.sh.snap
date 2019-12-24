@@ -11,6 +11,7 @@
 ##[debug]param: secrets = "{"secret":"val"}"
 ##[debug]param: valueFiles = "[]"
 ##[debug]param: removeCanary = 
+##[debug]param: timeout = ""
 ##[debug]env: KUBECONFIG="undefined"
 ##[debug]rendering value files [./values.yml] with: {"secrets":{"secret":"val"}}
 [command]helm upgrade app-canary /usr/src/charts/app --install --wait --atomic --namespace=default --set=app.name=app --set=app.version=1234 --values=./values.yml --set=service.enabled=false --set=ingress.enabled=false
