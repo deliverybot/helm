@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/deliverybot/helm/compare/v1.4.0...v1.5.0) (2019-12-24)
+
+
+### Features
+
+* Add timeout parameter ([#18](https://github.com/deliverybot/helm/issues/18)) ([d494b05](https://github.com/deliverybot/helm/commit/d494b05))
+
 ## [1.4.0](https://github.com/deliverybot/helm/compare/v1.3.0...v1.4.0) (2019-11-21)
 
 
