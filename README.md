@@ -150,3 +150,34 @@ jobs:
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 ```
+
+## Example add custom repository
+
+Sometime you may want to add a custom repository, like [chartmuseum](https://github.com/helm/chartmuseum). For th
+
+```yaml
+# .github/workflows/pr-cleanup.yml
+name: PRCleanup
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - name: 'Deploy'
+      uses: 'deliverybot/helm@v1'
+      with:
+        release: 'nginx'
+        namespace: 'default'
+        chart: 'chartmuseum/app'
+        token: '${{ github.token }}'
+        repo: 'http://chartmuseum.example.com'
+        repo_alias: chartmuseum
+        repo_username: ${{ secrets.CHARTMUSEUM_USERNAME }}
+        repo_password: ${{ secrets.CHARTMUSEUM_PASSWORD }}
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+```
+
