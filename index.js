@@ -262,7 +262,7 @@ async function run() {
       repoAddArgs.push("&&");
       repoAddArgs.push(helm);
       
-      args.unshift(repoAddArgs);
+      args = repoAddArgs.concat(args)
     }
 
     // Actually execute the deployment here.
