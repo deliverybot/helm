@@ -33,6 +33,10 @@ payload if the action was triggered by a deployment.
 - `helm`: Helm binary to execute, one of: [`helm`, `helm3`].
 - `version`: Version of the app, usually commit sha works here.
 - `timeout`: specify a timeout for helm deployment
+- `repo`: Helm chart repository to be added.
+- `repo_alias`: Helm repository alias that will be used.
+- `repo_username`: Helm repository username if authentication is needed.
+- `repo_password`: Helm repository password if authentication is needed.
 
 Additional parameters: If the action is being triggered by a deployment event
 and the `task` parameter in the deployment event is set to `"remove"` then this
