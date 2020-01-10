@@ -165,6 +165,10 @@ async function run() {
     const removeCanary = getInput("remove_canary");
     const helm = getInput("helm") || "helm";
     const timeout = getInput("timeout");
+    const repo = getInput("repo");
+    const repoAlias = getInput("repo_alias");
+    const repoUsername = getInput("repo_username");
+    const repoPassword = getInput("repo_password");
 
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
@@ -182,6 +186,10 @@ async function run() {
     core.debug(`param: valueFiles = "${JSON.stringify(valueFiles)}"`);
     core.debug(`param: removeCanary = ${removeCanary}`);
     core.debug(`param: timeout = "${timeout}"`);
+    core.debug(`param: repo = "${repo}"`);
+    core.debug(`param: repoAlias = "${repoAlias}"`);
+    core.debug(`param: repoUsername = "${repoUsername}"`);
+    core.debug(`param: repoPassword = "${repoPassword}"`);
 
     // Setup command options and arguments.
     const opts = { env: {
@@ -232,6 +240,26 @@ async function run() {
         ...opts,
         ignoreReturnCode: true
       });
+    }
+
+    if (repo !== "") {
+      if (repoAlias === "") {
+        core.setFailed("repo alias is required when you are setting a repository");
+        await status("failure");
+      }
+
+      core.debug(`adding custom repository ${repo} with alias ${repoAlias}`);
+      const repoAddArgs = [
+        "repo",
+        "add",
+        repoAlias,
+        repo,
+      ]
+
+      if (repoUsername) repoAddArgs.push(`--username=${repoUsername}`);
+      if (repoPassword) repoAddArgs.push(`--password=${repoPassword}`);
+      
+      await exec.exec(helm, repoAddArgs);
     }
 
     // Actually execute the deployment here.
