@@ -270,6 +270,7 @@ async function run() {
         ignoreReturnCode: true
       });
     } else {
+      await exec.exec(helm, ["repo", "update"]);
       await exec.exec(helm, args, opts);
     }
 
