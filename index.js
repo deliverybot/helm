@@ -195,7 +195,7 @@ async function run() {
     const opts = { env: {
       KUBECONFIG: process.env.KUBECONFIG,
     }};
-    const args = [
+    let args = [
       "upgrade",
       release,
       chart,
