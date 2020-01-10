@@ -1,6 +1,6 @@
-name: Deliverybot Helm Action
+name: Helm Action
 description: Deploys a helm chart
-author: deliverybot
+author: lykon
 icon: box
 color: gray-dark
 inputs:
@@ -27,6 +27,14 @@ inputs:
       JSON encoded map.
   version:
     description: Version of the app, usually commit sha works here.
+  repo:
+    description: Helm chart repository to be added.
+  repo_alias:
+    description: Helm repository alias that will be used.
+  repo_username:
+    description: Helm repository username if authentication is needed.
+  repo_password:
+    description: Helm repository password if authentication is needed.
 runs:
   using: docker
   image: Dockerfile
