@@ -260,7 +260,7 @@ async function run() {
       if (repoPassword) repoAddArgs.push(`--password=${repoPassword}`);
       
       await exec.exec(helm, repoAddArgs);
-      await exec.exec(helm, "repo list");
+      await exec.exec(helm, ["repo", "list"]);
     }
 
     // Actually execute the deployment here.
