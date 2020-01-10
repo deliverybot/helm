@@ -259,7 +259,7 @@ async function run() {
       if (repoUsername) repoAddArgs.push(`--username=${repoUsername}`);
       if (repoPassword) repoAddArgs.push(`--password=${repoPassword}`);
 
-      repoAddArgs.push("&&");
+      repoAddArgs.push(";");
       repoAddArgs.push(helm);
       
       args = repoAddArgs.concat(args)
