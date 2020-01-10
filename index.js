@@ -258,9 +258,11 @@ async function run() {
 
       if (repoUsername) repoAddArgs.push(`--username=${repoUsername}`);
       if (repoPassword) repoAddArgs.push(`--password=${repoPassword}`);
+
+      repoAddArgs.push("&&");
+      repoAddArgs.push(helm);
       
-      await exec.exec(helm, repoAddArgs);
-      await exec.exec(helm, ["repo", "list"]);
+      args.unshift(repoAddArgs);
     }
 
     // Actually execute the deployment here.
@@ -270,7 +272,6 @@ async function run() {
         ignoreReturnCode: true
       });
     } else {
-      await exec.exec(helm, ["repo", "update"]);
       await exec.exec(helm, args, opts);
     }
 
