@@ -166,9 +166,9 @@ async function run() {
     const helm = getInput("helm") || "helm";
     const timeout = getInput("timeout");
     const repo = getInput("repo");
-    const repoAlias = getInput("repo_alias");
-    const repoUsername = getInput("repo_username");
-    const repoPassword = getInput("repo_password");
+    const repoAlias = getInput("repo-alias");
+    const repoUsername = getInput("repo-username");
+    const repoPassword = getInput("repo-password");
 
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));

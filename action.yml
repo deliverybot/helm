@@ -40,13 +40,13 @@ inputs:
   repo:
     description: Helm chart repository to be added.
     required: false
-  repo_alias:
+  repo-alias:
     description: Helm repository alias that will be used.
     required: false
-  repo_username:
+  repo-username:
     description: Helm repository username if authentication is needed.
     required: false
-  repo_password:
+  repo-password:
     description: Helm repository password if authentication is needed.
     required: false
 runs:
