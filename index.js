@@ -158,6 +158,7 @@ async function run() {
     const release = releaseName(appName, track);
     const namespace = getInput("namespace", required);
     const chart = chartName(getInput("chart", required));
+    const chartVersion = getInput("chart_version");
     const values = getValues(getInput("values"));
     const task = getInput("task");
     const version = getInput("version");
@@ -165,7 +166,7 @@ async function run() {
     const removeCanary = getInput("remove_canary");
     const helm = getInput("helm") || "helm";
     const timeout = getInput("timeout");
-
+    const repository = getInput("repository");
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
 
@@ -174,6 +175,7 @@ async function run() {
     core.debug(`param: appName = "${appName}"`);
     core.debug(`param: namespace = "${namespace}"`);
     core.debug(`param: chart = "${chart}"`);
+    core.debug(`param: chart_version = "${chartVersion}"`);
     core.debug(`param: values = "${values}"`);
     core.debug(`param: dryRun = "${dryRun}"`);
     core.debug(`param: task = "${task}"`);
@@ -182,6 +184,8 @@ async function run() {
     core.debug(`param: valueFiles = "${JSON.stringify(valueFiles)}"`);
     core.debug(`param: removeCanary = ${removeCanary}`);
     core.debug(`param: timeout = "${timeout}"`);
+    core.debug(`param: repository = "${repository}"`);
+
 
     // Setup command options and arguments.
     const opts = { env: {
@@ -195,11 +199,15 @@ async function run() {
       "--wait",
       "--atomic",
       `--namespace=${namespace}`,
+      '--home=/root/.helm/',
     ];
+
     if (dryRun) args.push("--dry-run");
     if (appName) args.push(`--set=app.name=${appName}`);
     if (version) args.push(`--set=app.version=${version}`);
+    if (chartVersion) args.push(`--version=${chartVersion}`);
     if (timeout) args.push(`--timeout=${timeout}`);
+    if (repository) args.push(`--repo=${repository}`);
     valueFiles.forEach(f => args.push(`--values=${f}`));
     args.push("--values=./values.yml");
 
