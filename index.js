@@ -188,9 +188,6 @@ async function run() {
 
 
     // Setup command options and arguments.
-    const opts = { env: {
-      KUBECONFIG: process.env.KUBECONFIG,
-    }};
     const args = [
       "upgrade",
       release,
@@ -220,12 +217,12 @@ async function run() {
 
     // Setup necessary files.
     if (process.env.KUBECONFIG_FILE) {
-      opts.env.KUBECONFIG = "./kubeconfig.yml";
-      await writeFile(opts.env.KUBECONFIG, process.env.KUBECONFIG_FILE);
+      process.env.KUBECONFIG = "./kubeconfig.yml";
+      await writeFile(process.env.KUBECONFIG, process.env.KUBECONFIG_FILE);
     }
     await writeFile("./values.yml", values);
 
-    core.debug(`env: KUBECONFIG="${opts.env.KUBECONFIG}"`);
+    core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
 
     // Render value files using github variables.
     await renderFiles(valueFiles.concat(["./values.yml"]), {
@@ -237,7 +234,6 @@ async function run() {
     if (removeCanary) {
       core.debug(`removing canary ${appName}-canary`);
       await exec.exec(helm, deleteCmd(helm, namespace, `${appName}-canary`), {
-        ...opts,
         ignoreReturnCode: true
       });
     }
@@ -245,11 +241,10 @@ async function run() {
     // Actually execute the deployment here.
     if (task === "remove") {
       await exec.exec(helm, deleteCmd(helm, namespace, release), {
-        ...opts,
         ignoreReturnCode: true
       });
     } else {
-      await exec.exec(helm, args, opts);
+      await exec.exec(helm, args);
     }
 
     await status(task === "remove" ? "inactive" : "success");
