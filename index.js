@@ -196,8 +196,16 @@ async function run() {
       "--wait",
       "--atomic",
       `--namespace=${namespace}`,
-      '--home=/root/.helm/',
     ];
+
+    // Per https://helm.sh/docs/faq/#xdg-base-directory-support
+    if (helm === "helm3") {
+      process.env.XDG_DATA_HOME = "/root/.helm/"
+      process.env.XDG_CACHE_HOME = "/root/.helm/"
+      process.env.XDG_CONFIG_HOME = "/root/.helm/"
+    } else {
+      process.env.HELM_HOME = "/root/.helm/"
+    }
 
     if (dryRun) args.push("--dry-run");
     if (appName) args.push(`--set=app.name=${appName}`);
