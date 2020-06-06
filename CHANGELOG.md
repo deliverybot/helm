@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.1](https://github.com/deliverybot/helm/compare/v1.6.0...v1.6.1) (2020-06-06)
+
+
+### Bug Fixes
+
+* Remove colon in action.yml ([1f0d808](https://github.com/deliverybot/helm/commit/1f0d808b77f835b1547c80cdd5080a217465cefe))
+
 ## [1.6.0](https://github.com/deliverybot/helm/compare/v1.5.0...v1.6.0) (2020-06-06)
 
 
