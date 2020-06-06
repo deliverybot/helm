@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/deliverybot/helm/compare/v1.5.0...v1.6.0) (2020-06-06)
+
+
+### Features
+
+* Add additional parameters to download a chart by url ([#23](https://github.com/deliverybot/helm/issues/23)) ([547935f](https://github.com/deliverybot/helm/commit/547935f280af50b2cb7f7fcfd08c29f367433395))
+* Add missing `helm` input parameter to action.yml ([#29](https://github.com/deliverybot/helm/issues/29)) ([8612a75](https://github.com/deliverybot/helm/commit/8612a75699d4ca8ea60072bb3350f4d26095ad27))
+* Add support for EKS clusters and fix helm v3 home issue ([#27](https://github.com/deliverybot/helm/issues/27)) ([70b15cc](https://github.com/deliverybot/helm/commit/70b15cc0dc343686882dfb9185ff67cef9d47723)), closes [#22](https://github.com/deliverybot/helm/issues/22)
+
 ## [1.5.0](https://github.com/deliverybot/helm/compare/v1.4.0...v1.5.0) (2019-12-24)
 
 
