@@ -17,7 +17,7 @@ inputs:
     description: Task name. If the task is "remove" it will remove the configured
       helm release.
   helm:
-    description: Helm binary to execute, one of: [helm, helm3].
+    description: Helm binary to execute, one of [helm, helm3].
   token:
     description: Github repository token. If included and the event is a deployment
       the deployment_status event will be fired.
