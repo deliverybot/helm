@@ -34,7 +34,7 @@ payload if the action was triggered by a deployment.
   JSON encoded map.
 - `helm`: Helm binary to execute, one of: [`helm`, `helm3`].
 - `version`: Version of the app, usually commit sha works here.
-- `timeout`: specify a timeout for helm deployment
+- `timeout`: specify a timeout for helm deployment as duration, eg. `5m0s`
 - `repository`: specify the URL for a helm repo to come from
 
 Additional parameters: If the action is being triggered by a deployment event
