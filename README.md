@@ -79,6 +79,11 @@ jobs:
         token: '${{ github.token }}'
         values: |
           name: foobar
+        value-files: >-
+        [
+          "values.yaml", 
+          "values.production.yaml"
+        ]
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 ```
