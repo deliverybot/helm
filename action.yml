@@ -17,9 +17,14 @@ inputs:
   values:
     description: Helm chart values, expected to be a YAML or JSON string.
     required: false
+  task: 
+    description: Task name. If the task is "remove" it will remove the configured helm release.
+    required: false
   dry-run:
-    description: Task name. If the task is "remove" it will remove the configured
-      helm release.
+    description: Helm dry-run option
+    required: false
+  debug:
+    description: Helm debug option
     required: false
   helm:
     description: Helm binary to execute, one of [helm, helm3].

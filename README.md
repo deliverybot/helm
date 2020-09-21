@@ -25,6 +25,7 @@ payload if the action was triggered by a deployment.
 - `task`: Task name. If the task is "remove" it will remove the configured helm
   release.
 - `dry-run`: Helm dry-run option.
+- `debug`: Helm debug option.
 - `token`: Github repository token. If included and the event is a deployment
   then the deployment_status event will be fired.
 - `value-files`: Additional value files to apply to the helm chart. Expects a
