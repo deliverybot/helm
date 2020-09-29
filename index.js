@@ -251,6 +251,7 @@ async function run() {
 
 
     if (repository && repository_alias) {
+      core.info('Add repository');
       const addRepoArgs = [
         'repo',
         'add',
@@ -258,6 +259,7 @@ async function run() {
         repository,
       ]
 
+      core.info('Update repository');
       if (repository_username && repository_password) {
         addRepoArgs.push(`--username ${repository_username}`);
         addRepoArgs.push(`--password ${repository_password}`);
@@ -281,6 +283,7 @@ async function run() {
 
     // Remove the canary deployment before continuing.
     if (removeCanary) {
+      core.info('Remove canary helm chart');
       core.debug(`removing canary ${appName}-canary`);
       await exec.exec(helm, deleteCmd(helm, namespace, `${appName}-canary`), {
         ignoreReturnCode: true
@@ -289,10 +292,12 @@ async function run() {
 
     // Actually execute the deployment here.
     if (task === "remove") {
+      core.info('Remove helm chart');
       await exec.exec(helm, deleteCmd(helm, namespace, release), {
         ignoreReturnCode: true
       });
     } else {
+      core.info('Install helm chart');
       await exec.exec(helm, args);
     }
 
