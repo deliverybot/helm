@@ -258,7 +258,7 @@ async function run() {
       ]
 
       if (repository_username && repository_password) {
-        addRepoArgs.push(`--username ${repository_username}`, `--password ${repository_password}`);
+        addRepoArgs.push(`--username`, repository_username, `--password`, repository_password);
       }
 
       addRepoArgs.push(repository_alias, repository,)
