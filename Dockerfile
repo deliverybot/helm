@@ -2,8 +2,8 @@ FROM alpine:3.10.2
 
 ENV BASE_URL="https://get.helm.sh"
 
-ENV HELM_2_FILE="helm-v2.16.1-linux-amd64.tar.gz"
-ENV HELM_3_FILE="helm-v3.2.4-linux-amd64.tar.gz"
+ENV HELM_2_FILE="helm-v2.16.12-linux-amd64.tar.gz"
+ENV HELM_3_FILE="helm-v3.3.4-linux-amd64.tar.gz"
 
 RUN apk add --no-cache ca-certificates \
     --repository http://dl-3.alpinelinux.org/alpine/edge/community/ \
@@ -25,6 +25,7 @@ ENV PYTHONPATH "/usr/lib/python3.8/site-packages/"
 
 COPY . /usr/src/
 WORKDIR /usr/src/
+
 RUN npm ci
 
 ENTRYPOINT ["node", "/usr/src/index.js"]
