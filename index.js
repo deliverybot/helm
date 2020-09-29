@@ -176,6 +176,9 @@ async function run() {
     const helm = getInput("helm") || "helm";
     const timeout = getInput("timeout");
     const repository = getInput("repository");
+    const repository_password = getInput("repository_password");
+    const repository_username = getInput("repository_username");
+    const repository_alias = getInput("repository_alias");
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
 
@@ -194,6 +197,9 @@ async function run() {
     core.debug(`param: removeCanary = ${removeCanary}`);
     core.debug(`param: timeout = "${timeout}"`);
     core.debug(`param: repository = "${repository}"`);
+    core.debug(`param: repository_password = "${repository_password}"`);
+    core.debug(`param: repository_username = "${repository_username}"`);
+    core.debug(`param: repository_alias = "${repository_alias}"`);
 
 
     // Setup command options and arguments.
@@ -221,7 +227,6 @@ async function run() {
     if (version) args.push(`--set=app.version=${version}`);
     if (chartVersion) args.push(`--version=${chartVersion}`);
     if (timeout) args.push(`--timeout=${timeout}`);
-    if (repository) args.push(`--repo=${repository}`);
     valueFiles.forEach(f => args.push(`--values=${f}`));
     args.push("--values=./values.yml");
 
@@ -243,6 +248,27 @@ async function run() {
     await writeFile("./values.yml", values);
 
     core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
+
+
+    if (repository) {
+      const addRepoArgs = [
+        'repo',
+        'add',
+        repository_alias,
+        repository,
+        `--username ${repository_username}`,
+        `--password ${repository_password}`
+      ]
+
+      await exec.exec(helm, addRepoArgs);
+
+      const updateRepoArgs = [
+        'repo',
+        'update'
+      ]
+
+      await exec.exec(helm, updateRepoArgs);
+    }
 
     // Render value files using github variables.
     await renderFiles(valueFiles.concat(["./values.yml"]), {

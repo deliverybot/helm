@@ -49,6 +49,7 @@ action will execute a `helm delete $service`
 ### Environment
 
 - `KUBECONFIG_FILE`: Kubeconfig file for Kubernetes cluster access.
+- `KUBECONFIG_BASE64`: Kubeconfig as base64 for Kubernetes cluster access.
 
 ### Value file interpolation
 

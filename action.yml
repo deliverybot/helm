@@ -39,6 +39,18 @@ inputs:
   version:
     description: Version of the app, usually commit sha works here.
     required: false
+  repository:
+    description: Respository URL
+    required: false
+  repository-password:
+    description: Repo Password
+    required: false
+  repository-username:
+    description: Repo Username
+    required: false
+  repository-alias:
+    description: Alias
+    required: false
 runs:
   using: docker
   image: Dockerfile
