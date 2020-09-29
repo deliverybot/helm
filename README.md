@@ -1,3 +1,4 @@
+Credits to https://github.com/deliverybot/helm just cloned this repo because, want to move forward with some new features and open pull request on original repo.
 # Helm Action
 
 Deploys a helm chart using GitHub actions. Supports canary deployments and
