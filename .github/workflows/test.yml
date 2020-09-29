@@ -1,5 +1,5 @@
 name: 'Test'
-on: ['push']
+on: [ 'push' ]
 
 jobs:
 
@@ -7,19 +7,19 @@ jobs:
     runs-on: 'ubuntu-latest'
 
     steps:
-    - uses: 'actions/checkout@v1'
+      - uses: 'actions/checkout@v1'
 
-    - name: 'Build'
-      run: 'docker build -t helm .'
+      - name: 'Build'
+        run: 'docker build -t helm .'
 
-    - name: 'Test commands'
-      run: 'docker run --rm -i -v $PWD:/workspace --workdir=/workspace --entrypoint=/workspace/tests/test-snap.sh helm'
+      - name: 'Test commands'
+        run: 'docker run --rm -i -v $PWD/tests:/usr/src/tests --workdir=/usr/src --entrypoint=/usr/src/tests/test-snap.sh helm'
 
-    - name: 'Test chart'
-      run: 'docker run --rm -i -v $PWD:/workspace --workdir=/workspace --entrypoint=/workspace/tests/charts/test.sh helm'
+      - name: 'Test chart'
+        run: 'docker run --rm -i -v $PWD/tests:/usr/src/tests --workdir=/usr/src --entrypoint=/usr/src/tests/charts/test.sh helm'
 
-    - name: 'Test helm version'
-      run: 'docker run --rm -i --entrypoint=helm helm version -c'
+      - name: 'Test helm version'
+        run: 'docker run --rm -i --entrypoint=helm helm version -c'
 
-    - name: 'Test helm3 version'
-      run: 'docker run --rm -i --entrypoint=helm3 helm version'
+      - name: 'Test helm3 version'
+        run: 'docker run --rm -i --entrypoint=helm3 helm version'
