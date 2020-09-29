@@ -24,8 +24,7 @@ RUN apk add --no-cache ca-certificates \
 ENV PYTHONPATH "/usr/lib/python3.8/site-packages/"
 
 COPY . /usr/src/
-WORKDIR /user/src/
-RUN ls -la
+WORKDIR /usr/src/
 RUN npm ci
 
 ENTRYPOINT ["node", "/usr/src/index.js"]
