@@ -255,15 +255,13 @@ async function run() {
       const addRepoArgs = [
         'repo',
         'add',
-        repository_alias,
-        repository,
       ]
 
-      core.info('Update repository');
       if (repository_username && repository_password) {
-        addRepoArgs.push(`--username ${repository_username}`);
-        addRepoArgs.push(`--password ${repository_password}`);
+        addRepoArgs.push(`--username ${repository_username}`, `--password ${repository_password}`);
       }
+
+      addRepoArgs.push(repository_alias, repository,)
 
       await exec.exec(helm, addRepoArgs);
 
@@ -272,6 +270,7 @@ async function run() {
         'update'
       ]
 
+      core.info('Update repository');
       await exec.exec(helm, updateRepoArgs);
     }
 
