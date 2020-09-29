@@ -25,6 +25,7 @@ ENV PYTHONPATH "/usr/lib/python3.8/site-packages/"
 
 COPY . /usr/src/
 WORKDIR /user/src/
+RUN ls -la
 RUN npm ci
 
 ENTRYPOINT ["node", "/usr/src/index.js"]
