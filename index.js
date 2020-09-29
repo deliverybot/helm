@@ -250,15 +250,18 @@ async function run() {
     core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
 
 
-    if (repository) {
+    if (repository && repository_alias) {
       const addRepoArgs = [
         'repo',
         'add',
         repository_alias,
         repository,
-        `--username ${repository_username}`,
-        `--password ${repository_password}`
       ]
+
+      if (repository_username && repository_password) {
+        addRepoArgs.push(`--username ${repository_username}`);
+        addRepoArgs.push(`--password ${repository_password}`);
+      }
 
       await exec.exec(helm, addRepoArgs);
 

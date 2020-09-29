@@ -36,6 +36,9 @@ payload if the action was triggered by a deployment.
 - `version`: Version of the app, usually commit sha works here.
 - `timeout`: specify a timeout for helm deployment
 - `repository`: specify the URL for a helm repo to come from
+- `repository_password`: Password to login in to the repository.
+- `repository_username`: Username to login to the repository.
+- `repository_alias`: Alias of the repository.
 
 Additional parameters: If the action is being triggered by a deployment event
 and the `task` parameter in the deployment event is set to `"remove"` then this
