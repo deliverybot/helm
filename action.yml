@@ -17,9 +17,15 @@ inputs:
   values:
     description: Helm chart values, expected to be a YAML or JSON string.
     required: false
-  dry-run:
+  task:
     description: Task name. If the task is "remove" it will remove the configured
       helm release.
+    required: false
+  dry-run:
+    description: Simulate an upgrade.
+    required: false
+  atomic:
+    description: If true, upgrade process rolls back changes made in case of failed upgrade. Defaults to true.
     required: false
   helm:
     description: Helm binary to execute, one of [helm, helm3].
