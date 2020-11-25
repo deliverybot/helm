@@ -4,6 +4,7 @@ const exec = require("@actions/exec");
 const fs = require("fs");
 const util = require("util");
 const Mustache = require("mustache");
+const yaml = require('js-yaml');
 
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
@@ -209,7 +210,17 @@ async function run() {
 
     if (dryRun) args.push("--dry-run");
     if (appName) args.push(`--set=app.name=${appName}`);
-    if (version) args.push(`--set=app.version=${version}`);
+    if (version) {
+      if (fs.existsSync(`${chart}/Chart.yaml`)) {
+        var chartContent = fs.readFileSync(`${chart}/Chart.yaml`, "utf8");
+        var chartData = yaml.safeLoad(chartContent);
+        chartData.appVersion = String(version)
+        chartContent = yaml.safeDump(chartData)
+        fs.writeFileSync(`${chart}/Chart.yaml`, chartContent, 'utf8');
+      }
+
+      args.push(`--set=app.version=${version}`);
+    }
     if (chartVersion) args.push(`--version=${chartVersion}`);
     if (timeout) args.push(`--timeout=${timeout}`);
     if (repository) args.push(`--repo=${repository}`);
