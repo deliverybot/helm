@@ -169,6 +169,7 @@ async function run() {
     const repository = getInput("repository");
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
+    const atomic = getInput("atomic") || true;
 
     core.debug(`param: track = "${track}"`);
     core.debug(`param: release = "${release}"`);
@@ -185,6 +186,7 @@ async function run() {
     core.debug(`param: removeCanary = ${removeCanary}`);
     core.debug(`param: timeout = "${timeout}"`);
     core.debug(`param: repository = "${repository}"`);
+    core.debug(`param: atomic = "${atomic}"`);
 
 
     // Setup command options and arguments.
@@ -194,7 +196,6 @@ async function run() {
       chart,
       "--install",
       "--wait",
-      "--atomic",
       `--namespace=${namespace}`,
     ];
 
@@ -221,6 +222,11 @@ async function run() {
     // deployments can be routed via the main stable service resource.
     if (track === "canary") {
       args.push("--set=service.enabled=false", "--set=ingress.enabled=false");
+    }
+
+    // If true upgrade process rolls back changes made in case of failed upgrade.
+    if (atomic === true) {
+      args.push("--atomic");
     }
 
     // Setup necessary files.
