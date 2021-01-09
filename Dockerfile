@@ -19,7 +19,7 @@ RUN apk add --no-cache ca-certificates \
     chmod +x /usr/bin/helm3 && \
     rm -rf linux-amd64 && \
     # Init version 2 helm:
-    helm init --client-only
+    helm init --client-only --skip-refresh
 
 ENV PYTHONPATH "/usr/lib/python3.8/site-packages/"
 
