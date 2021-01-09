@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/deliverybot/helm/compare/v1.6.1...v1.7.0) (2021-01-09)
+
+
+### Features
+
+* Add flag for atomic variable ([#45](https://github.com/deliverybot/helm/issues/45)) ([c5da4d5](https://github.com/deliverybot/helm/commit/c5da4d5cd0cba39b959459af1da0b5e3ed9b887f))
+* Add required parameter to all action inputs ([#33](https://github.com/deliverybot/helm/issues/33)) ([7035d19](https://github.com/deliverybot/helm/commit/7035d19603bf6ead15e61b8feba0f0feec9d9861))
+* Upgrade helm ([#50](https://github.com/deliverybot/helm/issues/50)) ([0ce1ab7](https://github.com/deliverybot/helm/commit/0ce1ab79060b30006b1800919d61332ed279d75f))
+
 ### [1.6.1](https://github.com/deliverybot/helm/compare/v1.6.0...v1.6.1) (2020-06-06)
 
 
