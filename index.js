@@ -204,6 +204,9 @@ async function run() {
       process.env.XDG_DATA_HOME = "/root/.helm/"
       process.env.XDG_CACHE_HOME = "/root/.helm/"
       process.env.XDG_CONFIG_HOME = "/root/.helm/"
+
+      // Helm v3 has support for creating a namespace during 'helm upgrade'
+      args.push("--create-namespace");
     } else {
       process.env.HELM_HOME = "/root/.helm/"
     }
