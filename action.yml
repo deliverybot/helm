@@ -6,21 +6,30 @@ branding:
   color: gray-dark
 inputs:
   release:
-    description: Helm release name. Will be combined with track if set.
+    description: Helm release name. Will be combined with track if set. (required)
     required: true
   namespace:
-    description: Kubernetes namespace name.
+    description: Kubernetes namespace name. (required)
     required: true
   chart:
     description: Helm chart path. If set to "app" this will use the built in helm
-      chart found in this repository.
+      chart found in this repository. (required)
     required: true
   values:
     description: Helm chart values, expected to be a YAML or JSON string.
     required: false
-  dry-run:
+  task:
     description: Task name. If the task is "remove" it will remove the configured
       helm release.
+    required: false
+  dry-run:
+    description: Simulate an upgrade.
+    required: false
+  atomic:
+    description: If true, upgrade process rolls back changes made in case of failed upgrade. Defaults to true.
+    required: false
+  helm:
+    description: Helm binary to execute, one of [helm, helm3].
     required: false
   token:
     description: Github repository token. If included and the event is a deployment
@@ -36,18 +45,6 @@ inputs:
     required: false
   version:
     description: Version of the app, usually commit sha works here.
-    required: false
-  repo:
-    description: Helm chart repository to be added.
-    required: false
-  repo-alias:
-    description: Helm repository alias that will be used.
-    required: false
-  repo-username:
-    description: Helm repository username if authentication is needed.
-    required: false
-  repo-password:
-    description: Helm repository password if authentication is needed.
     required: false
 runs:
   using: docker
