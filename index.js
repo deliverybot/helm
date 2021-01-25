@@ -161,8 +161,7 @@ async function addRepo(helm) {
 
   if (repo !== "") {
     if (repoAlias === "") {
-      core.setFailed("repo alias is required when you are setting a repository");
-      return status("failure");
+      throw new Error("repo alias is required when you are setting a repository");
     }
 
     core.debug(`adding custom repository ${repo} with alias ${repoAlias}`);
