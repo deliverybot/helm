@@ -18,6 +18,7 @@ payload if the action was triggered by a deployment.
 - `namespace`: Kubernetes namespace name. (required)
 - `chart`: Helm chart path. If set to "app" this will use the built in helm
   chart found in this repository. (required)
+- `chart_version`: The version of the helm chart you want to deploy (distinct from app version)
 - `values`: Helm chart values, expected to be a YAML or JSON string.
 - `track`: Track for the deployment. If the track is not "stable" it activates
   the canary workflow described below.
@@ -37,6 +38,7 @@ payload if the action was triggered by a deployment.
 - `repo-alias`: Helm repository alias that will be used.
 - `repo-username`: Helm repository username if authentication is needed.
 - `repo-password`: Helm repository password if authentication is needed.
+- `atomic`: If true, upgrade process rolls back changes made in case of failed upgrade. Defaults to true.
 
 Additional parameters: If the action is being triggered by a deployment event
 and the `task` parameter in the deployment event is set to `"remove"` then this
@@ -81,6 +83,11 @@ jobs:
         token: '${{ github.token }}'
         values: |
           name: foobar
+        value-files: >-
+        [
+          "values.yaml", 
+          "values.production.yaml"
+        ]
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 ```
