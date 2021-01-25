@@ -304,7 +304,7 @@ async function run() {
   try {
     await status("pending");
 
-    const helm = getInput("helm") || "helm";
+    const helm = getInput("helm") || "helm3";
     core.debug(`param: helm = "${helm}"`);
 
     for(const command of commands) {
