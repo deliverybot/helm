@@ -176,7 +176,8 @@ async function addRepo(helm) {
     if (repoUsername) args.push(`--username=${repoUsername}`);
     if (repoPassword) args.push(`--password=${repoPassword}`);
 
-    return exec.exec(helm, args);
+    await exec.exec(helm, args);
+    await exec.exec(helm, ["repo", "update"])
   }
 
   return Promise.resolve()
