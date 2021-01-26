@@ -231,10 +231,6 @@ async function deploy(helm) {
     `--namespace=${namespace}`,
   ];
 
-  process.env.XDG_DATA_HOME = "/root/.helm/"
-  process.env.XDG_CACHE_HOME = "/root/.helm/"
-  process.env.XDG_CONFIG_HOME = "/root/.helm/"
-
   if (dryRun) args.push("--dry-run");
   if (appName) args.push(`--set=app.name=${appName}`);
   if (version) args.push(`--set=app.version=${version}`);
@@ -255,12 +251,6 @@ async function deploy(helm) {
   // If true upgrade process rolls back changes made in case of failed upgrade.
   if (atomic === true) {
     args.push("--atomic");
-  }
-
-  // Setup necessary files.
-  if (process.env.KUBECONFIG_FILE) {
-    process.env.KUBECONFIG = "./kubeconfig.yml";
-    await writeFile(process.env.KUBECONFIG, process.env.KUBECONFIG_FILE);
   }
 
   await writeFile("./values.yml", values);
@@ -300,6 +290,16 @@ async function run() {
   try {
     await status("pending");
 
+    process.env.XDG_DATA_HOME = "/root/.helm/"
+    process.env.XDG_CACHE_HOME = "/root/.helm/"
+    process.env.XDG_CONFIG_HOME = "/root/.helm/"
+  
+    // Setup necessary files.
+    if (process.env.KUBECONFIG_FILE) {
+      process.env.KUBECONFIG = "./kubeconfig.yml";
+      await writeFile(process.env.KUBECONFIG, process.env.KUBECONFIG_FILE);
+    }
+    
     const helm = getInput("helm") || "helm3";
     core.debug(`param: helm = "${helm}"`);
 
