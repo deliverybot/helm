@@ -146,6 +146,15 @@ function deleteCmd(helm, namespace, release) {
 }
 
 /**
+ * Takes in a secret value and decodes it from base64.
+ *
+ * @param {string} secretVal
+ */
+function parseBase64(secretVal) {
+  return Buffer.from(secretVal, 'base64').toString('utf-8');
+}
+
+/**
  * Run executes the helm deployment.
  */
 async function run() {
@@ -233,6 +242,9 @@ async function run() {
     if (process.env.KUBECONFIG_FILE) {
       process.env.KUBECONFIG = "./kubeconfig.yml";
       await writeFile(process.env.KUBECONFIG, process.env.KUBECONFIG_FILE);
+    } else if (process.env.KUBECONFIG_BASE64) {
+      process.env.KUBECONFIG = "./kubeconfig.yml";
+      await writeFile(process.env.KUBECONFIG, parseBase64(process.env.KUBECONFIG_BASE64));
     }
     await writeFile("./values.yml", values);
 
