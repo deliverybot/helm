@@ -146,6 +146,17 @@ function deleteCmd(helm, namespace, release) {
 }
 
 /**
+ * Makes a test command 
+ *
+ * @param {string} helm
+ * @param {string} namespace
+ * @param {string} release
+ */
+function testCmd(helm, namespace,  release) {
+    return ["test", "-n", namespace,  release, "--logs"];
+}
+
+/**
  * Run executes the helm deployment.
  */
 async function run() {
@@ -196,6 +207,7 @@ async function run() {
       chart,
       "--install",
       "--wait",
+      "--create-namespace",
       `--namespace=${namespace}`,
     ];
 
@@ -257,7 +269,10 @@ async function run() {
       await exec.exec(helm, deleteCmd(helm, namespace, release), {
         ignoreReturnCode: true
       });
-    } else {
+    } else if (task === "test") {
+      await exec.exec(helm, testCmd(helm, namespace, release), {
+      });
+    }else {
       await exec.exec(helm, args);
     }
 
