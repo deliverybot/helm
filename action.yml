@@ -45,6 +45,9 @@ inputs:
   version:
     description: Version of the app, usually commit sha works here.
     required: false
+  image-tag:
+    description: Image tag.
+    required: false
 runs:
   using: docker
   image: Dockerfile

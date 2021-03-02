@@ -170,6 +170,7 @@ async function run() {
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
     const atomic = getInput("atomic") || true;
+    const imageTag = getInput("image_tag");
 
     core.debug(`param: track = "${track}"`);
     core.debug(`param: release = "${release}"`);
@@ -187,7 +188,7 @@ async function run() {
     core.debug(`param: timeout = "${timeout}"`);
     core.debug(`param: repository = "${repository}"`);
     core.debug(`param: atomic = "${atomic}"`);
-
+    core.debug(`param: image_tag = "${imageTag}"`);
 
     // Setup command options and arguments.
     const args = [
@@ -211,6 +212,7 @@ async function run() {
     if (dryRun) args.push("--dry-run");
     if (appName) args.push(`--set=app.name=${appName}`);
     if (version) args.push(`--set=app.version=${version}`);
+    if (imageTag) args.push(`--set=image.tag=${imageTag}`);
     if (chartVersion) args.push(`--version=${chartVersion}`);
     if (timeout) args.push(`--timeout=${timeout}`);
     if (repository) args.push(`--repo=${repository}`);
