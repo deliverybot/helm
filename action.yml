@@ -19,6 +19,9 @@ inputs:
   timeout:
     description: Specify a timeout for helm deployment as duration, eg. `5m0s`
     required: false
+  repository:
+    description: Chart repository url where to locate the requested chart
+    required: false
   dry-run:
     description: Task name. If the task is "remove" it will remove the configured
       helm release.
