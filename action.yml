@@ -16,6 +16,11 @@ inputs:
     required: true
   values:
     description: Helm chart values, expected to be a YAML or JSON string.
+  timeout:
+    description: Specify a timeout for helm deployment as duration, eg. `5m0s`
+    required: false
+  repository:
+    description: Chart repository url where to locate the requested chart
     required: false
   task:
     description: Task name. If the task is "remove" it will remove the configured
@@ -44,6 +49,8 @@ inputs:
     required: false
   version:
     description: Version of the app, usually commit sha works here.
+  chart-version:
+    description: The version of the helm chart you want to deploy (distinct from app version)
     required: false
 runs:
   using: docker
