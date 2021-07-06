@@ -196,6 +196,7 @@ async function run() {
       chart,
       "--install",
       "--wait",
+      "--create-namespace",
       `--namespace=${namespace}`,
     ];
 
