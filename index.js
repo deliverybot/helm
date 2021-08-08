@@ -182,6 +182,7 @@ async function run() {
     const repository_alias = getInput("repository-alias");
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
+    const kubeContext = getInput("kube-context");
     const kubeToken = getInput("kube-token");
 
     core.debug(`param: track = "${track}"`);
@@ -202,6 +203,7 @@ async function run() {
     core.debug(`param: repository_password = "${repository_password}"`);
     core.debug(`param: repository_username = "${repository_username}"`);
     core.debug(`param: repository_alias = "${repository_alias}"`);
+    core.debug(`param: kube-context = "${kubeContext}"`);
     core.debug(`param: kube-token = "${kubeToken}"`);
 
 
@@ -217,6 +219,7 @@ async function run() {
     ];
 
     if (kubeToken) args.push(`--kube-token ${shellescape(kubeToken)}`);
+    if (kubeContext) args.push(`--kube-context ${shellescape(kubeContext)}`);
 
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
     if (helm === "helm3") {
