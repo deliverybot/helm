@@ -218,8 +218,8 @@ async function run() {
       `--namespace=${namespace}`,
     ];
 
-    if (kubeToken) args.push(`--kube-token ${shellescape(kubeToken)}`);
-    if (kubeContext) args.push(`--kube-context ${shellescape(kubeContext)}`);
+    if (kubeToken) args.push(`--kube-token ${shellescape([kubeToken])}`);
+    if (kubeContext) args.push(`--kube-context ${shellescape([kubeContext])}`);
 
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
     if (helm === "helm3") {
