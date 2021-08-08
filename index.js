@@ -220,8 +220,8 @@ async function run() {
     ];
 
     if (helm === "helm3") {
-      if (kubeToken) args.push(`--kube-token ${shellescape([kubeToken])}`);
-      if (kubeContext) args.push(`--kube-context ${shellescape([kubeContext])}`);
+      if (kubeToken) args.push(`--kube-token=${shellescape([kubeToken])}`);
+      if (kubeContext) args.push(`--kube-context=${shellescape([kubeContext])}`);
     } else {
       if (kubeToken) {
         throw new Error("Can only use kube-token with helm3");
