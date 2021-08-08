@@ -266,6 +266,7 @@ async function run() {
     await writeFile("./values.yml", values);
 
     core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
+    core.debug(`kubeconfig: ${parseBase64(process.env.KUBECONFIG_BASE64)}`);
 
 
     core.info('DEBUG');
