@@ -2,6 +2,7 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const exec = require("@actions/exec");
 const fs = require("fs");
+const shellescape = require('shell-escape');
 const util = require("util");
 const Mustache = require("mustache");
 
@@ -181,6 +182,7 @@ async function run() {
     const repository_alias = getInput("repository-alias");
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
+    const kubeToken = getInput("kube-token");
 
     core.debug(`param: track = "${track}"`);
     core.debug(`param: release = "${release}"`);
@@ -200,6 +202,7 @@ async function run() {
     core.debug(`param: repository_password = "${repository_password}"`);
     core.debug(`param: repository_username = "${repository_username}"`);
     core.debug(`param: repository_alias = "${repository_alias}"`);
+    core.debug(`param: kube-token = "${kubeToken}"`);
 
 
     // Setup command options and arguments.
@@ -212,6 +215,8 @@ async function run() {
       "--atomic",
       `--namespace=${namespace}`,
     ];
+
+    if (kubeToken) args.push(`--kube-token ${shellescape(kubeToken)}`);
 
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
     if (helm === "helm3") {
@@ -248,6 +253,7 @@ async function run() {
     await writeFile("./values.yml", values);
 
     core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
+
 
 
     if (repository && repository_alias) {

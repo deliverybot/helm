@@ -51,6 +51,9 @@ inputs:
   repository-alias:
     description: Alias
     required: false
+  kube-token:
+    description: Bearer token to use for authentication with Kubernetes. Can be fetched with e.g. elseu/sdu-eks-token-action
+    required: false
 runs:
   using: docker
   image: Dockerfile
