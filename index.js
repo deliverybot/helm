@@ -185,6 +185,7 @@ async function run() {
     const kubeContext = getInput("kube-context");
     const kubeToken = getInput("kube-token");
 
+    core.debug(`param: helm = "${helm}"`);
     core.debug(`param: track = "${track}"`);
     core.debug(`param: release = "${release}"`);
     core.debug(`param: appName = "${appName}"`);
@@ -218,8 +219,17 @@ async function run() {
       `--namespace=${namespace}`,
     ];
 
-    if (kubeToken) args.push(`--kube-token ${shellescape([kubeToken])}`);
-    if (kubeContext) args.push(`--kube-context ${shellescape([kubeContext])}`);
+    if (helm === "helm3") {
+      if (kubeToken) args.push(`--kube-token ${shellescape([kubeToken])}`);
+      if (kubeContext) args.push(`--kube-context ${shellescape([kubeContext])}`);
+    } else {
+      if (kubeToken) {
+        throw new Error("Can only use kube-token with helm3");
+      }
+      if (kubeContext) {
+        throw new Error("Can only use kube-context with helm3");
+      }
+    }
 
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
     if (helm === "helm3") {
