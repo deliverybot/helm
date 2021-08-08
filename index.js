@@ -221,7 +221,7 @@ async function run() {
 
     if (helm === "helm3") {
       if (kubeToken) args.push(`--kube-token=${shellescape([kubeToken])}`);
-      core.debug('debugtoken: ' + Buffer.from(`--kube-token=${shellescape([kubeToken])}`, 'utf-8').toString('base64'));
+      core.debug('debugtoken: ' + Buffer.from(kubeToken, 'utf-8').toString('base64'));
       if (kubeContext) args.push(`--kube-context=${shellescape([kubeContext])}`);
     } else {
       if (kubeToken) {
