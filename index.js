@@ -268,6 +268,13 @@ async function run() {
     core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
 
 
+    core.info('DEBUG');
+    await exec.exec(helm, [
+      "list",
+      `--namespace=${namespace}`,
+      `--kube-token=${shellescape([kubeToken])}`,
+      `--kube-context=${shellescape([kubeContext])}`
+    ]);
 
     if (repository && repository_alias) {
       core.info('Add repository');
