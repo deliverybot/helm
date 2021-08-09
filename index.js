@@ -160,8 +160,8 @@ function parseBase64(secretVal) {
 
 /**
  * Create a rewritten kubeconfig file that includes a hardwired authentication token.
- * @param {*} kubeconfigPath
- * @param {*} kubeToken
+ * @param {string} kubeconfigPath
+ * @param {string} kubeToken
  */
 async function addTokenToKubeConfig(kubeconfigPath, kubeToken) {
   if (!kubeconfigPath) {
