@@ -313,12 +313,11 @@ async function run() {
         process.env.KUBECONFIG = await addTokenToKubeConfig(process.env.KUBECONFIG, kubeToken);
       }
     }
-    await exec.exec([
-      helm,
+    await exec.exec(helm, [
       "list",
       `--namespace=${namespace}`,
       `--kube-context=${kubeContext}`
-    ], args);
+    ]);
     throw new Error("Test test");
 
     core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
