@@ -309,7 +309,7 @@ async function run() {
         args.push(`--kube-token=${kubeToken}`);
       } else {
         // Helm 2 does not support the --kube-token option.
-        // So we rewrite the KUBECONFIG file to include the token and context in there.
+        // So we rewrite the KUBECONFIG file to include the token in there.
         process.env.KUBECONFIG = await addTokenToKubeConfig(process.env.KUBECONFIG, kubeToken);
       }
     }

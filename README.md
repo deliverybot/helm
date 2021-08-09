@@ -39,6 +39,8 @@ payload if the action was triggered by a deployment.
 - `repository_password`: Password to login in to the repository.
 - `repository_username`: Username to login to the repository.
 - `repository_alias`: Alias of the repository.
+- `kube-token`: Bearer token to use for authentication with Kubernetes. Can be fetched with e.g. elseu/sdu-eks-token-action.
+- `kube-context`: Context to use to connect to the Kubernetes API.
 
 Additional parameters: If the action is being triggered by a deployment event
 and the `task` parameter in the deployment event is set to `"remove"` then this
@@ -86,7 +88,7 @@ jobs:
           name: foobar
         value-files: >-
         [
-          "values.yaml", 
+          "values.yaml",
           "values.production.yaml"
         ]
       env:
