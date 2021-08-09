@@ -315,7 +315,6 @@ async function run() {
     }
     await exec.exec(helm, [
       "list",
-      `--namespace=${namespace}`,
       `--kube-context=${kubeContext}`
     ]);
     throw new Error("Test test");
