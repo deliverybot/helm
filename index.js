@@ -181,7 +181,10 @@ async function run() {
     const repository_alias = getInput("repository-alias");
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
+    const kubeContext = getInput("kube-context");
+    const kubeToken = getInput("kube-token");
 
+    core.debug(`param: helm = "${helm}"`);
     core.debug(`param: track = "${track}"`);
     core.debug(`param: release = "${release}"`);
     core.debug(`param: appName = "${appName}"`);
@@ -200,6 +203,8 @@ async function run() {
     core.debug(`param: repository_password = "${repository_password}"`);
     core.debug(`param: repository_username = "${repository_username}"`);
     core.debug(`param: repository_alias = "${repository_alias}"`);
+    core.debug(`param: kube-context = "${kubeContext}"`);
+    core.debug(`param: kube-token = "${kubeToken}"`);
 
 
     // Setup command options and arguments.
@@ -212,6 +217,14 @@ async function run() {
       "--atomic",
       `--namespace=${namespace}`,
     ];
+
+    if (helm === "helm3") {
+      if (kubeToken) args.push(`--kube-token=${kubeToken}`);
+      if (kubeContext) args.push(`--kube-context=${kubeContext}`);
+    } else {
+      if (kubeToken) throw new Error("Can only use kube-token with helm3");
+      if (kubeContext) throw new Error("Can only use kube-context with helm3");
+    }
 
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
     if (helm === "helm3") {
@@ -248,7 +261,6 @@ async function run() {
     await writeFile("./values.yml", values);
 
     core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
-
 
     if (repository && repository_alias) {
       core.info('Add repository');
