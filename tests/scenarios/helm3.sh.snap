@@ -1,4 +1,5 @@
 ::debug::not setting deployment status
+::debug::param: helm = "helm3"
 ::debug::param: track = "stable"
 ::debug::param: release = "app"
 ::debug::param: appName = "app"
@@ -17,6 +18,8 @@
 ::debug::param: repository_password = ""
 ::debug::param: repository_username = ""
 ::debug::param: repository_alias = ""
+::debug::param: kube-context = ""
+::debug::param: kube-token = ""
 ::debug::env: KUBECONFIG="undefined"
 ::debug::rendering value files [./values.yml] with: {"secrets":{"secret":"val"}}
 Install helm chart
