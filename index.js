@@ -2,7 +2,6 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const exec = require("@actions/exec");
 const fs = require("fs");
-const shellescape = require('shell-escape');
 const util = require("util");
 const Mustache = require("mustache");
 
@@ -220,15 +219,11 @@ async function run() {
     ];
 
     if (helm === "helm3") {
-      process.env.HELM_KUBETOKEN = kubeToken;
-      process.env.HELM_KUBECONTEXT = kubeContext;
+      if (kubeToken) args.push(`--kube-token=${kubeToken}`);
+      if (kubeContext) args.push(`--kube-context=${kubeContext}`);
     } else {
-      if (kubeToken) {
-        throw new Error("Can only use kube-token with helm3");
-      }
-      if (kubeContext) {
-        throw new Error("Can only use kube-context with helm3");
-      }
+      if (kubeToken) throw new Error("Can only use kube-token with helm3");
+      if (kubeContext) throw new Error("Can only use kube-context with helm3");
     }
 
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
@@ -266,16 +261,6 @@ async function run() {
     await writeFile("./values.yml", values);
 
     core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
-    core.debug(`kubeconfig: ${parseBase64(process.env.KUBECONFIG_BASE64)}`);
-
-
-    core.info('DEBUG');
-    await exec.exec(helm, [
-      "list",
-      `--namespace=${namespace}`,
-      `--kube-token=${shellescape([kubeToken])}`,
-      `--kube-context=${shellescape([kubeContext])}`
-    ]);
 
     if (repository && repository_alias) {
       core.info('Add repository');
