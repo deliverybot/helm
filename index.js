@@ -2,11 +2,15 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const exec = require("@actions/exec");
 const fs = require("fs");
+const os = require("os");
+const path = require("path");
 const util = require("util");
+const yaml = require("js-yaml");
 const Mustache = require("mustache");
 
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
+const fileExists = util.promisify(fs.exists);
 const required = { required: true };
 
 /**
@@ -155,6 +159,52 @@ function parseBase64(secretVal) {
 }
 
 /**
+ * Create a rewritten kubeconfig file that includes a hardwired authentication token.
+ * @param {*} kubeconfigPath
+ * @param {*} kubeToken
+ */
+async function addTokenToKubeConfig(kubeconfigPath, kubeToken) {
+  if (!kubeconfigPath) {
+    kubeconfigPath = path.join(os.homedir(), ".kube", "config");
+  }
+  if (!await fileExists(kubeconfigPath)) {
+    throw new Error("Cannot find a kubeconfig file, which is required when using helm2 with the kube-token option");
+  }
+
+  // Read the kubeconfig file.
+  const kubeconfigData = await readFile(kubeconfigPath, { encoding: "utf8" });
+  const kubeconfigContent = yaml.load(kubeconfigData, {
+    filename: kubeconfigPath
+  });
+
+  // Create a user with the specified token.
+  const userName = "helm-deploy-action-token-user";
+  if (!kubeconfigContent.users) {
+    kubeconfigContent.users = [];
+  }
+  kubeconfigContent.users.push({
+    name: userName,
+    user: {
+      token: kubeToken
+    }
+  });
+
+  // Hook up that user to each context.
+  if (!kubeconfigContent.contexts) {
+    throw new Error("Cannot find contexts in the kubeconfig file, which are required when using helm2 with the kube-token option");
+  }
+  for (const context of kubeconfigContent.contexts) {
+    context.context.user = userName;
+  }
+
+  // Write it to a local temp file.
+  const newKubeconfigYaml = yaml.dump(kubeconfigContent);
+  const newKubeconfigPath = "./kubeconfig-with-token.yml";
+  await writeFile(newKubeconfigPath, newKubeconfigYaml);
+  return newKubeconfigPath;
+}
+
+/**
  * Run executes the helm deployment.
  */
 async function run() {
@@ -218,14 +268,6 @@ async function run() {
       `--namespace=${namespace}`,
     ];
 
-    if (helm === "helm3") {
-      if (kubeToken) args.push(`--kube-token=${kubeToken}`);
-      if (kubeContext) args.push(`--kube-context=${kubeContext}`);
-    } else {
-      if (kubeToken) throw new Error("Can only use kube-token with helm3");
-      if (kubeContext) throw new Error("Can only use kube-context with helm3");
-    }
-
     // Per https://helm.sh/docs/faq/#xdg-base-directory-support
     if (helm === "helm3") {
       process.env.XDG_DATA_HOME = "/root/.helm/"
@@ -259,6 +301,18 @@ async function run() {
       await writeFile(process.env.KUBECONFIG, parseBase64(process.env.KUBECONFIG_BASE64));
     }
     await writeFile("./values.yml", values);
+
+    if (kubeContext) args.push(`--kube-context=${kubeContext}`);
+
+    if (kubeToken) {
+      if (helm === "helm3") {
+        args.push(`--kube-token=${kubeToken}`);
+      } else {
+        // Helm 2 does not support the --kube-token option.
+        // So we rewrite the KUBECONFIG file to include the token and context in there.
+        process.env.KUBECONFIG = await addTokenToKubeConfig(process.env.KUBECONFIG, kubeToken);
+      }
+    }
 
     core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
 

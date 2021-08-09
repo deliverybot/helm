@@ -12,6 +12,7 @@
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
     "@actions/github": "^1.0.0",
+    "js-yaml": "^4.1.0",
     "mustache": "^3.0.3"
   },
   "scripts": {
