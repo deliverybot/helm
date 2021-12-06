@@ -18,7 +18,7 @@ payload if the action was triggered by a deployment.
 - `namespace`: Kubernetes namespace name. (required)
 - `chart`: Helm chart path. If set to "app" this will use the built in helm
   chart found in this repository. (required)
-- `chart_version`: The version of the helm chart you want to deploy (distinct from app version)
+- `chart-version`: The version of the helm chart you want to deploy (distinct from app version)
 - `values`: Helm chart values, expected to be a YAML or JSON string.
 - `track`: Track for the deployment. If the track is not "stable" it activates
   the canary workflow described below.
