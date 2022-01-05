@@ -167,6 +167,8 @@ async function run() {
     const helm = getInput("helm") || "helm";
     const timeout = getInput("timeout");
     const repository = getInput("repository");
+    const repositoryUsername = getInput("repository_username");
+    const repositoryPassword = getInput("repository_password");
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
     const atomic = getInput("atomic") || true;
@@ -186,6 +188,8 @@ async function run() {
     core.debug(`param: removeCanary = ${removeCanary}`);
     core.debug(`param: timeout = "${timeout}"`);
     core.debug(`param: repository = "${repository}"`);
+    core.debug(`param: repositoryUsername = "${repositoryUsername}"`);
+    core.debug(`param: repositoryPassword = "${repositoryPassword}"`);
     core.debug(`param: atomic = "${atomic}"`);
 
 
@@ -214,6 +218,8 @@ async function run() {
     if (chartVersion) args.push(`--version=${chartVersion}`);
     if (timeout) args.push(`--timeout=${timeout}`);
     if (repository) args.push(`--repo=${repository}`);
+    if(repositoryUsername) args.push(`--username=${repositoryUsername}`);
+    if(repositoryPassword) args.push(`--password=${repositoryPassword}`);
     valueFiles.forEach(f => args.push(`--values=${f}`));
     args.push("--values=./values.yml");
 
