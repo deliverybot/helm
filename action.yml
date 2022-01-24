@@ -1,6 +1,6 @@
 name: Deliverybot Helm Action
 description: Deploys a helm chart
-author: deliverybot
+author: glopezep
 icon: box
 color: gray-dark
 inputs:
