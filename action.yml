@@ -1,6 +1,6 @@
-name: Deliverybot Helm Action
+name: Deliverybot Helm Action forked by neosec
 description: Deploys a helm chart
-author: deliverybot
+author: neosec
 icon: box
 color: gray-dark
 inputs:
