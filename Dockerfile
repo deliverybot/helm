@@ -2,7 +2,7 @@ FROM alpine:3.16.0
 
 ENV BASE_URL="https://get.helm.sh"
 
-ENV HELM_3_FILE="helm-v3.4.2-linux-amd64.tar.gz"
+ENV HELM_3_FILE="helm-v3.9.0-linux-amd64.tar.gz"
 
 RUN apk add --no-cache ca-certificates \
     --repository http://dl-3.alpinelinux.org/alpine/edge/community/ \
