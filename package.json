@@ -1,12 +1,12 @@
 {
   "name": "status",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "main": "index.js",
   "license": "MIT",
-  "homepage": "https://github.com/deliverybot/helm",
+  "homepage": "https://github.com/glopezep/helm",
   "author": {
-    "name": "deliverybot",
-    "url": "https://github.com/deliverybot"
+    "name": "glopezep",
+    "url": "https://github.com/glopezep"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
