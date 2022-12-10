@@ -1,6 +1,6 @@
-name: Deliverybot Helm Action
+name: Deliverybot Helm Action forked by navi86
 description: Deploys a helm chart
-author: deliverybot
+author: navi86
 icon: box
 color: gray-dark
 inputs:

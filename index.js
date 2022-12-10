@@ -170,6 +170,7 @@ async function run() {
     const dryRun = core.getInput("dry-run");
     const secrets = getSecrets(core.getInput("secrets"));
     const atomic = getInput("atomic") || true;
+    const wait = getInput("wait") || true;
 
     core.debug(`param: track = "${track}"`);
     core.debug(`param: release = "${release}"`);
@@ -187,6 +188,7 @@ async function run() {
     core.debug(`param: timeout = "${timeout}"`);
     core.debug(`param: repository = "${repository}"`);
     core.debug(`param: atomic = "${atomic}"`);
+    core.debug(`param: wait = "${wait}"`);
 
 
     // Setup command options and arguments.
@@ -195,7 +197,6 @@ async function run() {
       release,
       chart,
       "--install",
-      "--wait",
       `--namespace=${namespace}`,
     ];
 
@@ -227,6 +228,11 @@ async function run() {
     // If true upgrade process rolls back changes made in case of failed upgrade.
     if (atomic === true) {
       args.push("--atomic");
+    }
+
+    // If true wait upgrade helm chart.
+    if (wait === true) {
+      args.push("--wait");
     }
 
     // Setup necessary files.
