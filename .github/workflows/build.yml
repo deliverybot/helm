@@ -21,7 +21,7 @@ jobs:
       - uses: docker/metadata-action@v4
         id: meta
         with:
-          images: "ghcr.io/condensedtea/helm"
+          images: "ghcr.io/vimeda/helm"
           tags: |
             ${{ github.sha }}
             latest
