@@ -66,4 +66,4 @@ inputs:
     required: false
 runs:
   using: docker
-  image: ghcr.io/condensedtea/helm
+  image: docker://ghcr.io/condensedtea/helm
