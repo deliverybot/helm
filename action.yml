@@ -66,4 +66,4 @@ inputs:
     required: false
 runs:
   using: docker
-  image: ghcr.io/vimeda/helm
+  image: docker://ghcr.io/vimeda/helm
