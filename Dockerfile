@@ -11,14 +11,11 @@ RUN apk add --no-cache ca-certificates jq curl bash
 # Install node and deps
 RUN apk add --no-cache nodejs
 
-# Install Aws CLI
-RUN apk add --no-cache aws-cli
-
 # Install Python3
 RUN apk add --no-cache python3 py3-pip
 
-# Install Python deps
-RUN pip3 install --upgrade pip
+# Install Python deps and aws cli
+RUN pip3 install --upgrade pip awscli
 
 # Install helm version 2
 RUN curl -L ${BASE_URL}/${HELM_2_FILE} |tar xvz && \
