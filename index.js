@@ -145,123 +145,169 @@ function deleteCmd(helm, namespace, release) {
   return ["delete", "--purge", release];
 }
 
+/*
+ * Optionally add a helm repository
+ */
+async function addRepo(helm) {
+  const repo = getInput("repo");
+  const repoAlias = getInput("repo-alias");
+  const repoUsername = getInput("repo-username");
+  const repoPassword = getInput("repo-password");
+
+  core.debug(`param: repo = "${repo}"`);
+  core.debug(`param: repoAlias = "${repoAlias}"`);
+  core.debug(`param: repoUsername = "${repoUsername}"`);
+  core.debug(`param: repoPassword = "${repoPassword}"`);
+
+  if (repo !== "") {
+    if (repoAlias === "") {
+      throw new Error("repo alias is required when you are setting a repository");
+    }
+
+    core.debug(`adding custom repository ${repo} with alias ${repoAlias}`);
+
+    const args = [
+      "repo",
+      "add",
+      repoAlias,
+      repo,
+    ]
+
+    if (repoUsername) args.push(`--username=${repoUsername}`);
+    if (repoPassword) args.push(`--password=${repoPassword}`);
+
+    await exec.exec(helm, args);
+    await exec.exec(helm, ["repo", "update"])
+  }
+
+  return Promise.resolve()
+}
+
+/*
+ * Deploy the release
+ */
+async function deploy(helm) {
+  const context = github.context;
+
+  const track = getInput("track") || "stable";
+  const appName = getInput("release", required);
+  const release = releaseName(appName, track);
+  const namespace = getInput("namespace", required);
+  const chart = chartName(getInput("chart", required));
+  const chartVersion = getInput("chart_version");
+  const values = getValues(getInput("values"));
+  const task = getInput("task");
+  const version = getInput("version");
+  const valueFiles = getValueFiles(getInput("value_files"));
+  const removeCanary = getInput("remove_canary");
+  const timeout = getInput("timeout");
+  const dryRun = core.getInput("dry-run");
+  const secrets = getSecrets(core.getInput("secrets"));
+  const atomic = getInput("atomic") || true;
+
+  core.debug(`param: track = "${track}"`);
+  core.debug(`param: release = "${release}"`);
+  core.debug(`param: appName = "${appName}"`);
+  core.debug(`param: namespace = "${namespace}"`);
+  core.debug(`param: chart = "${chart}"`);
+  core.debug(`param: chart_version = "${chartVersion}"`);
+  core.debug(`param: values = "${values}"`);
+  core.debug(`param: dryRun = "${dryRun}"`);
+  core.debug(`param: task = "${task}"`);
+  core.debug(`param: version = "${version}"`);
+  core.debug(`param: secrets = "${JSON.stringify(secrets)}"`);
+  core.debug(`param: valueFiles = "${JSON.stringify(valueFiles)}"`);
+  core.debug(`param: removeCanary = ${removeCanary}`);
+  core.debug(`param: timeout = "${timeout}"`);
+  core.debug(`param: atomic = "${atomic}"`);
+
+  // Setup command options and arguments.
+  let args = [
+    "upgrade",
+    release,
+    chart,
+    "--install",
+    "--wait",
+    `--namespace=${namespace}`,
+  ];
+
+  if (dryRun) args.push("--dry-run");
+  if (appName) args.push(`--set=app.name=${appName}`);
+  if (version) args.push(`--set=app.version=${version}`);
+  if (chartVersion) args.push(`--version=${chartVersion}`);
+  if (timeout) args.push(`--timeout=${timeout}`);
+
+  valueFiles.forEach(f => args.push(`--values=${f}`));
+
+  args.push("--values=./values.yml");
+
+  // Special behaviour is triggered if the track is labelled 'canary'. The
+  // service and ingress resources are disabled. Access to the canary
+  // deployments can be routed via the main stable service resource.
+  if (track === "canary") {
+    args.push("--set=service.enabled=false", "--set=ingress.enabled=false");
+  }
+
+  // If true upgrade process rolls back changes made in case of failed upgrade.
+  if (atomic === true) {
+    args.push("--atomic");
+  }
+
+  await writeFile("./values.yml", values);
+
+  core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
+
+  // Render value files using github variables.
+  await renderFiles(valueFiles.concat(["./values.yml"]), {
+    secrets,
+    deployment: context.payload.deployment,
+  });
+
+  // Remove the canary deployment before continuing.
+  if (removeCanary) {
+    core.debug(`removing canary ${appName}-canary`);
+    await exec.exec(helm, deleteCmd(helm, namespace, `${appName}-canary`), {
+      ignoreReturnCode: true
+    });
+  }
+
+  // Actually execute the deployment here.
+  if (task === "remove") {
+    return exec.exec(helm, deleteCmd(helm, namespace, release), {
+      ignoreReturnCode: true
+    });
+  }
+
+  return exec.exec(helm, args);
+}
+
 /**
  * Run executes the helm deployment.
  */
 async function run() {
+  const commands = [addRepo, deploy]
+
   try {
-    const context = github.context;
     await status("pending");
 
-    const track = getInput("track") || "stable";
-    const appName = getInput("release", required);
-    const release = releaseName(appName, track);
-    const namespace = getInput("namespace", required);
-    const chart = chartName(getInput("chart", required));
-    const chartVersion = getInput("chart_version");
-    const values = getValues(getInput("values"));
-    const task = getInput("task");
-    const version = getInput("version");
-    const valueFiles = getValueFiles(getInput("value_files"));
-    const removeCanary = getInput("remove_canary");
-    const helm = getInput("helm") || "helm";
-    const timeout = getInput("timeout");
-    const repository = getInput("repository");
-    const dryRun = core.getInput("dry-run");
-    const secrets = getSecrets(core.getInput("secrets"));
-    const atomic = getInput("atomic") || true;
-
-    core.debug(`param: track = "${track}"`);
-    core.debug(`param: release = "${release}"`);
-    core.debug(`param: appName = "${appName}"`);
-    core.debug(`param: namespace = "${namespace}"`);
-    core.debug(`param: chart = "${chart}"`);
-    core.debug(`param: chart_version = "${chartVersion}"`);
-    core.debug(`param: values = "${values}"`);
-    core.debug(`param: dryRun = "${dryRun}"`);
-    core.debug(`param: task = "${task}"`);
-    core.debug(`param: version = "${version}"`);
-    core.debug(`param: secrets = "${JSON.stringify(secrets)}"`);
-    core.debug(`param: valueFiles = "${JSON.stringify(valueFiles)}"`);
-    core.debug(`param: removeCanary = ${removeCanary}`);
-    core.debug(`param: timeout = "${timeout}"`);
-    core.debug(`param: repository = "${repository}"`);
-    core.debug(`param: atomic = "${atomic}"`);
-
-
-    // Setup command options and arguments.
-    const args = [
-      "upgrade",
-      release,
-      chart,
-      "--install",
-      "--wait",
-      `--namespace=${namespace}`,
-    ];
-
-    // Per https://helm.sh/docs/faq/#xdg-base-directory-support
-    if (helm === "helm3") {
-      process.env.XDG_DATA_HOME = "/root/.helm/"
-      process.env.XDG_CACHE_HOME = "/root/.helm/"
-      process.env.XDG_CONFIG_HOME = "/root/.helm/"
-    } else {
-      process.env.HELM_HOME = "/root/.helm/"
-    }
-
-    if (dryRun) args.push("--dry-run");
-    if (appName) args.push(`--set=app.name=${appName}`);
-    if (version) args.push(`--set=app.version=${version}`);
-    if (chartVersion) args.push(`--version=${chartVersion}`);
-    if (timeout) args.push(`--timeout=${timeout}`);
-    if (repository) args.push(`--repo=${repository}`);
-    valueFiles.forEach(f => args.push(`--values=${f}`));
-    args.push("--values=./values.yml");
-
-    // Special behaviour is triggered if the track is labelled 'canary'. The
-    // service and ingress resources are disabled. Access to the canary
-    // deployments can be routed via the main stable service resource.
-    if (track === "canary") {
-      args.push("--set=service.enabled=false", "--set=ingress.enabled=false");
-    }
-
-    // If true upgrade process rolls back changes made in case of failed upgrade.
-    if (atomic === true) {
-      args.push("--atomic");
-    }
-
+    process.env.XDG_DATA_HOME = "/root/.helm/"
+    process.env.XDG_CACHE_HOME = "/root/.helm/"
+    process.env.XDG_CONFIG_HOME = "/root/.helm/"
+  
     // Setup necessary files.
     if (process.env.KUBECONFIG_FILE) {
       process.env.KUBECONFIG = "./kubeconfig.yml";
       await writeFile(process.env.KUBECONFIG, process.env.KUBECONFIG_FILE);
     }
-    await writeFile("./values.yml", values);
+    
+    const helm = getInput("helm") || "helm3";
+    core.debug(`param: helm = "${helm}"`);
 
-    core.debug(`env: KUBECONFIG="${process.env.KUBECONFIG}"`);
-
-    // Render value files using github variables.
-    await renderFiles(valueFiles.concat(["./values.yml"]), {
-      secrets,
-      deployment: context.payload.deployment,
-    });
-
-    // Remove the canary deployment before continuing.
-    if (removeCanary) {
-      core.debug(`removing canary ${appName}-canary`);
-      await exec.exec(helm, deleteCmd(helm, namespace, `${appName}-canary`), {
-        ignoreReturnCode: true
-      });
+    for(const command of commands) {
+      await command(helm);
     }
 
-    // Actually execute the deployment here.
-    if (task === "remove") {
-      await exec.exec(helm, deleteCmd(helm, namespace, release), {
-        ignoreReturnCode: true
-      });
-    } else {
-      await exec.exec(helm, args);
-    }
-
-    await status(task === "remove" ? "inactive" : "success");
+    await status("success");
   } catch (error) {
     core.error(error);
     core.setFailed(error.message);

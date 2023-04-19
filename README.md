@@ -18,7 +18,7 @@ payload if the action was triggered by a deployment.
 - `namespace`: Kubernetes namespace name. (required)
 - `chart`: Helm chart path. If set to "app" this will use the built in helm
   chart found in this repository. (required)
-- `chart_version`: The version of the helm chart you want to deploy (distinct from app version)
+- `chart-version`: The version of the helm chart you want to deploy (distinct from app version)
 - `values`: Helm chart values, expected to be a YAML or JSON string.
 - `track`: Track for the deployment. If the track is not "stable" it activates
   the canary workflow described below.
@@ -34,7 +34,10 @@ payload if the action was triggered by a deployment.
 - `helm`: Helm binary to execute, one of: [`helm`, `helm3`].
 - `version`: Version of the app, usually commit sha works here.
 - `timeout`: specify a timeout for helm deployment
-- `repository`: specify the URL for a helm repo to come from
+- `repo`: Helm chart repository to be added.
+- `repo-alias`: Helm repository alias that will be used.
+- `repo-username`: Helm repository username if authentication is needed.
+- `repo-password`: Helm repository password if authentication is needed.
 - `atomic`: If true, upgrade process rolls back changes made in case of failed upgrade. Defaults to true.
 
 Additional parameters: If the action is being triggered by a deployment event
@@ -43,8 +46,8 @@ action will execute a `helm delete $service`
 
 #### Versions
 
-- `helm`: v2.16.1
-- `helm3`: v3.0.0
+- `helm`: v2.17.0
+- `helm3`: v3.8.1
 
 ### Environment
 
@@ -158,3 +161,34 @@ jobs:
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
 ```
+
+## Example add custom repository
+
+Sometime you may want to add a custom repository, like [chartmuseum](https://github.com/helm/chartmuseum). For th
+
+```yaml
+# .github/workflows/pr-cleanup.yml
+name: PRCleanup
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - name: 'Deploy'
+      uses: 'deliverybot/helm@v1'
+      with:
+        release: 'nginx'
+        namespace: 'default'
+        chart: 'chartmuseum/app'
+        token: '${{ github.token }}'
+        repo: 'http://chartmuseum.example.com'
+        repo-alias: chartmuseum
+        repo-username: ${{ secrets.CHARTMUSEUM_USERNAME }}
+        repo-password: ${{ secrets.CHARTMUSEUM_PASSWORD }}
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+```
+
