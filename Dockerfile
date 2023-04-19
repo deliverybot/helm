@@ -9,7 +9,7 @@ ENV HELM_3_FILE="helm-v3.8.1-linux-amd64.tar.gz"
 ENV PYTHONPATH "/usr/lib/python3.11/site-packages/"
 
 RUN apk add --no-cache ca-certificates \
-    --repository http://dl-3.alpinelinux.org/alpine/edge/community/ \
+    --repository https://dl-3.alpinelinux.org/alpine/latest-stable/community/ \
     jq curl bash nodejs aws-cli && \
     # Install helm version 2:
     curl -L ${BASE_URL}/${HELM_2_FILE} |tar xvz && \
