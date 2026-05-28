@@ -1,4 +1,4 @@
-FROM alpine:3.14.0
+FROM node:24-alpine
 
 ENV BASE_URL="https://get.helm.sh"
 
@@ -14,10 +14,7 @@ ENV HELM_REPOSITORY_CACHE="/root/.cache/helm/repository"
 ENV HELM_REPOSITORY_CONFIG="/root/.config/helm/repositories.yaml"
 
 RUN apk add --no-cache ca-certificates \
-    --repository http://dl-3.alpinelinux.org/alpine/edge/community/ \
-    jq curl bash nodejs aws-cli py3-setuptools &&\
-    apk add py3-pip git && \
-    pip3 install awscli
+    jq curl bash aws-cli py3-setuptools git
 RUN \
     # Install helm version 2:
     curl -L ${BASE_URL}/${HELM_2_FILE} |tar xvz && \
@@ -34,8 +31,6 @@ RUN \
     # install helm s3 plugin
     helm3 plugin install https://github.com/hypnoglow/helm-s3 --version v0.16.2
 
-
-ENV PYTHONPATH "/usr/lib/python3.8/site-packages/"
 
 COPY . /usr/src/
 ENTRYPOINT ["node", "/usr/src/index.js"]
