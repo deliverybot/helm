@@ -1,5 +1,8 @@
 # Helm Action
 
+> [!WARNING]
+> This action is no longer maintained and the repository is archived. It installs Helm 2, which reached end of life in 2020, and its built-in chart uses an Ingress API that Kubernetes removed in 1.22. To deploy a Helm chart with Deliverybot, run `helm upgrade --install` in your deployment workflow instead, as described in the [Helm guide](https://deliverybot.dev/docs/integrations/action-helm/).
+
 Deploys a helm chart using GitHub actions. Supports canary deployments and
 provides a built in helm chart for apps that listen over http to get your ramped
 up quickly.
