@@ -1,8 +1,9 @@
-name: Deliverybot Helm Action
+name: Deliverybot Helm Action forked by headout
 description: Deploys a helm chart
-author: deliverybot
-icon: box
-color: gray-dark
+author: headout
+branding:
+  icon: arrow-right
+  color: purple
 inputs:
   release:
     description: Helm release name. Will be combined with track if set. (required)
